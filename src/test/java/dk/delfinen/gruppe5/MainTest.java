@@ -7,6 +7,6 @@ class MainTest {
 
     @Test
     void simpleTest() {
-        assertEquals(3, 1 + 1);
+        assertEquals(2, 1 + 1);
     }
 }
