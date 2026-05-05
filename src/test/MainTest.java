@@ -1,8 +1,8 @@
-import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainTest {
+
     @Test
     void simpleTest() {
         assertEquals(2, 1 + 1);
