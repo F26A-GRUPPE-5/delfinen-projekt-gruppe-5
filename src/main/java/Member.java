@@ -4,7 +4,7 @@ public class Member {
 
     public Member(String name, int BirthYear) {
         this.Name = name;
-        this.BithYear = BirthYear;
+        this.BithYear = BirthYear
     }
 
     // Hej med dig jeg er også online
