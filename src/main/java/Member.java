@@ -1,28 +1,24 @@
 import java.time.Year;
+import java.util.ArrayList;
 
 public class Member {
     private String name;
     private int birthYear;
     private boolean isActive;
-    private boolean isCompeditor;
+    private boolean isCompetitor;
+    private static ArrayList<Member> members = new ArrayList<>();
 
     public Member(String name, int birthYear, boolean isActive, boolean isCompeditor) {
         this.name = name;
         this.birthYear = birthYear;
         this.isActive = isActive;
-        this.isCompeditor = isCompeditor;
+        this.isCompetitor = isCompeditor;
+        members.add(this);
     }
+
     public int getAge() {
         int currentYear = Year.now().getValue();
         return currentYear - birthYear;
-    }
-    public boolean isJunior() {
-        return getAge() <18;
-
-    }
-
-    public boolean isSenior() {
-        return getAge() >= 18;
     }
 
     public String getName() {
@@ -38,6 +34,16 @@ public class Member {
     }
 
     public boolean isCompeditor() {
-        return isCompeditor;
+        return isCompetitor;
     }
-}
+    public static ArrayList<Member> getMembers() {
+        return members;
+
+    }
+
+    public String toString() {
+        return "Navn:" + name + "\nFødselsår: " + birthYear + "\nEr aktiv? " + isActive + "\nEr konkurrencesvømmer? " + isCompetitor + "\n";
+    }
+
+    }
+
