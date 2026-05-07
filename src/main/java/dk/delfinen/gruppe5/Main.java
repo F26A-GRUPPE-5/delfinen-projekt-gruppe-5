@@ -21,7 +21,6 @@ public class Main {
 
         System.out.println(members);
 
-
         System.out.println("Id on the member you wanna se Fee on");
         int input = scanner.nextInt();
         System.out.printf("%.0f%n", members.getMemberById(input).getFee());
