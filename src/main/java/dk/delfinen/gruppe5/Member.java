@@ -4,18 +4,17 @@ import java.time.Year;
 
 public class Member {
     private String name;
-    private int bithYear;
     private String activity;
-    private boolean isActive;
     private int birthYear;
+    private Membership membership;
     private boolean isCompetitor;
 
-    public Member(String name, int birthYear, boolean isActive, boolean isCompeditor, String activity) {
+    public Member(String name, int birthYear, boolean isCompeditor, String activity, Membership membership) {
         this.name = name;
         this.birthYear = birthYear;
-        this.isActive = isActive;
         this.isCompetitor = isCompeditor;
         this.activity = activity;
+        this.membership = membership;
     }
 
     public String getActivity() {
@@ -34,22 +33,18 @@ public class Member {
         return birthYear;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
     @Override
     public String toString() {
         return String.format("""
     navn: %s
     alder: %s
-    aktiv: %s
+    membership: %s
     aktivitet: %s
     
     """,
                 getName(),
                 getAge(),
-                isActive(),
+                membership.getType(),
                 getActivity()
                 );
     }
