@@ -6,4 +6,6 @@ public class Member {
         this.Name = name;
         this.BithYear = BirthYear
     }
+
+    // Hej med dig jeg er også online
 }
