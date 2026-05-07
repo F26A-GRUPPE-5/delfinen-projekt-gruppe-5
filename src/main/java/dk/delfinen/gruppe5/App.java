@@ -20,7 +20,7 @@ public class App {
             Scanner scanner = new Scanner(System.in);
 
             while (!scanner.hasNextInt()) {
-                System.out.println("Indtast et tal:");
+                System.out.println("Indtast et tal: ");
                 scanner.next();
             }
             int inputMenuChoice = scanner.nextInt();
