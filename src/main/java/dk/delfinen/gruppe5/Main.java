@@ -1,6 +1,9 @@
 package dk.delfinen.gruppe5;
 
 
+import dk.delfinen.gruppe5.application.usecase.MemberList;
+import dk.delfinen.gruppe5.domain.model.Member;
+
 public class Main {
     public static void main(String[] args) {
         MemberList members = new MemberList();
