@@ -8,13 +8,16 @@ public class Member {
     private int birthYear;
     private Membership membership;
     private boolean isCompetitor;
+    private int memberId;
 
-    public Member(String name, int birthYear, boolean isCompeditor, String activity, Membership membership) {
+    public Member(String name, int birthYear, boolean isCompeditor, String activity, Membership membership, int memberId) {
         this.name = name;
         this.birthYear = birthYear;
         this.isCompetitor = isCompeditor;
         this.activity = activity;
         this.membership = membership;
+        this.memberId = memberId;
+
     }
 
     public String getActivity() {
@@ -31,6 +34,14 @@ public class Member {
 
     public int getBirthYear() {
         return birthYear;
+    }
+
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public double getFee() {
+        return membership.calculateFee(getAge());
     }
 
     @Override

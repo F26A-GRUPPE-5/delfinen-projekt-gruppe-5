@@ -17,6 +17,15 @@ public class MemberList {
         return members;
     }
 
+    public Member getMemberById(int memberId) {
+        for (Member member : members) {
+            if (member.getMemberId() == memberId) {
+                return member;
+            }
+        }
+        return null;
+    }
+
     public void addMember(Member member) {
         members.add(member);
     }
