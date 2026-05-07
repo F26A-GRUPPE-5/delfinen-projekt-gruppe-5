@@ -33,17 +33,5 @@ public class Member {
         return isActive;
     }
 
-    public boolean isCompeditor() {
-        return isCompetitor;
-    }
-    public static ArrayList<Member> getMembers() {
-        return members;
-
-    }
-
-    public String toString() {
-        return "Navn:" + name + "\nFødselsår: " + birthYear + "\nEr aktiv? " + isActive + "\nEr konkurrencesvømmer? " + isCompetitor + "\n";
-    }
-
-    }
-
+    // Hej test 5
+}
