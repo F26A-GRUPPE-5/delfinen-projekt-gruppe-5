@@ -7,5 +7,5 @@ public class Member {
         this.BithYear = BirthYear;
     }
 
-    // Hej med dig jeg er online
+    // Hej med dig jeg er også online
 }
