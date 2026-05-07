@@ -47,12 +47,14 @@ public class Member {
     @Override
     public String toString() {
         return String.format("""
+    meldemId: %s
     navn: %s
     alder: %s
     membership: %s
     aktivitet: %s
     
     """,
+                getMemberId(),
                 getName(),
                 getAge(),
                 membership.getType(),
