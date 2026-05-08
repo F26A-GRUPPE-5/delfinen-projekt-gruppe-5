@@ -51,6 +51,7 @@ public class MemberList {
         return id;
     }
 
+
     public void sortByActivity() {
         Comparator<Member> byActivity = new Comparator<Member>() {
             Collator danishCollator = Collator.getInstance(Locale.forLanguageTag("da-DK"));
