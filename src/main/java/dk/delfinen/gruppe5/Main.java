@@ -41,7 +41,7 @@ public class Main {
             System.out.println(m);
 
         }
-        System.out.println("Har ikke betalt");
+        System.out.println("Har ik betalt");
         for (Member m : subscription.getUnpaidMembers()) {
             System.out.println(m);
 
