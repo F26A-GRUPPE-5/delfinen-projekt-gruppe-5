@@ -1,22 +1,25 @@
 package dk.delfinen.gruppe5.domain.model;
 
+import dk.delfinen.gruppe5.domain.service.Membership;
+
 import java.time.Year;
 
 // Her i model lever Entities, inklusiv Business Rules, altså regler for hvad man må og ikke må.
 public class Member {
     private String name;
-    private int bithYear;
     private String activity;
-    private boolean isActive;
     private int birthYear;
+    private Membership membership;
     private boolean isCompetitor;
+    private int memberId;
 
-    public Member(String name, int birthYear, boolean isActive, boolean isCompeditor, String activity) {
+    public Member(String name, int birthYear, boolean isCompeditor, String activity, Membership membership, int memberId) {
         this.name = name;
         this.birthYear = birthYear;
-        this.isActive = isActive;
         this.isCompetitor = isCompeditor;
         this.activity = activity;
+        this.membership = membership;
+        this.memberId = memberId;
     }
 
     public String getActivity() {
@@ -35,23 +38,29 @@ public class Member {
         return birthYear;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public double getFee() {
+        return membership.calculateFee(getAge());
     }
 
     @Override
     public String toString() {
         return String.format("""
+    meldemId: %s
     navn: %s
     alder: %s
-    aktiv: %s
+    membership: %s
     aktivitet: %s
     
     """,
+                getMemberId(),
                 getName(),
                 getAge(),
-                isActive(),
+                membership.getType(),
                 getActivity()
-                );
+        );
     }
 }
