@@ -25,9 +25,9 @@ public class MemberList {
         return members;
     }
 
-    public Member getMemberById(int memberId) {
+    public Member getMemberById(int id) {
         for (Member member : members) {
-            if (member.getMemberId() == memberId) {
+            if (member.getId() == id) {
                 return member;
             }
         }
@@ -37,7 +37,7 @@ public class MemberList {
     public void addMember(String name, int birthYear, boolean isCompetitor, String activity, Membership membership) {
 
         int id = generateMemberId();
-        members.add(new Member(name, birthYear, isCompetitor, activity, membership, id));
+        members.add(new Member(id, name, birthYear, isCompetitor, activity, membership));
     }
 
     public int generateMemberId() {

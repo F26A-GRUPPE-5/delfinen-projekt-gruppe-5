@@ -1,4 +1,5 @@
 package dk.delfinen.gruppe5.adapter.in;
+// Adapter laget kaldes også infrastructure i Clean Architecture
 
 import dk.delfinen.gruppe5.application.usecase.MemberList;
 import dk.delfinen.gruppe5.domain.model.Member;

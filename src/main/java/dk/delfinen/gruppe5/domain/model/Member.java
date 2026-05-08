@@ -5,29 +5,28 @@ import dk.delfinen.gruppe5.domain.service.Membership;
 import java.time.Year;
 
 // Her i model lever Entities, inklusiv Business Rules, altså regler for hvad man må og ikke må.
-public class Member {
-    private String name;
-    private String activity;
-    private int birthYear;
-    private Membership membership;
-    private boolean isCompetitor;
-    private int memberId;
 
-    public Member(String name, int birthYear, boolean isCompeditor, String activity, Membership membership, int memberId) {
+public class Member {
+    private final int id;
+    private String name;
+    private int birthYear;
+    private boolean isCompetitor;
+    private String activity;
+    private Membership membership;
+
+
+    public Member(int id, String name, int birthYear, boolean isCompeditor, String activity, Membership membership) {
+        this.id = id;
         this.name = name;
         this.birthYear = birthYear;
         this.isCompetitor = isCompeditor;
         this.activity = activity;
         this.membership = membership;
-        this.memberId = memberId;
     }
 
-    public String getActivity() {
-        return activity;
-    }
-    public int getAge() {
-        int currentYear = Year.now().getValue();
-        return currentYear - birthYear;
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -38,8 +37,18 @@ public class Member {
         return birthYear;
     }
 
-    public int getMemberId() {
-        return memberId;
+    public boolean getIsCompetitor() {
+        return isCompetitor;
+    }
+
+    public String getActivity() {
+        return activity;
+    }
+
+
+    public int getAge() {
+        int currentYear = Year.now().getValue();
+        return currentYear - birthYear;
     }
 
     public double getFee() {
@@ -49,14 +58,14 @@ public class Member {
     @Override
     public String toString() {
         return String.format("""
-    meldemId: %s
-    navn: %s
-    alder: %s
-    membership: %s
-    aktivitet: %s
-    
-    """,
-                getMemberId(),
+                        meldemId: %s
+                        navn: %s
+                        alder: %s
+                        membership: %s
+                        aktivitet: %s
+                        
+                        """,
+                getId(),
                 getName(),
                 getAge(),
                 membership.getType(),
@@ -64,3 +73,4 @@ public class Member {
         );
     }
 }
+
