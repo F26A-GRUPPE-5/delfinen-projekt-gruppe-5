@@ -120,7 +120,7 @@ public class Controller {
         Member toRemove = null;
 
         for (Member member : members) {
-            if (member.getMemberId() == chosenMember) {
+            if (member.getId() == chosenMember) {
                 toRemove = member;
                 break;
             }
