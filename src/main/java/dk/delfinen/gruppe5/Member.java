@@ -9,14 +9,16 @@ public class Member {
     private Membership membership;
     private boolean isCompetitor;
     private int memberId;
+    private boolean hasPaid;
 
-    public Member(String name, int birthYear, boolean isCompeditor, String activity, Membership membership, int memberId) {
+    public Member(String name, int birthYear, boolean isCompetitor, String activity, Membership membership, int memberId) {
         this.name = name;
         this.birthYear = birthYear;
-        this.isCompetitor = isCompeditor;
+        this.isCompetitor = isCompetitor;
         this.activity = activity;
         this.membership = membership;
         this.memberId = memberId;
+        this.hasPaid = false;
 
     }
 
@@ -42,6 +44,14 @@ public class Member {
 
     public double getFee() {
         return membership.calculateFee(getAge());
+    }
+
+    public void setHasPaid(boolean hasPaid) {
+        this.hasPaid = hasPaid;
+    }
+
+    public boolean hasPaid() {
+        return hasPaid;
     }
 
     @Override
