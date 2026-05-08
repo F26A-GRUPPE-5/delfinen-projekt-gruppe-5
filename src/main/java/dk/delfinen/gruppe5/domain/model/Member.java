@@ -1,7 +1,10 @@
-package dk.delfinen.gruppe5;
+package dk.delfinen.gruppe5.domain.model;
+
+import dk.delfinen.gruppe5.domain.service.Membership;
 
 import java.time.Year;
 
+// Her i model lever Entities, inklusiv Business Rules, altså regler for hvad man må og ikke må.
 public class Member {
     private String name;
     private String activity;
@@ -17,7 +20,6 @@ public class Member {
         this.activity = activity;
         this.membership = membership;
         this.memberId = memberId;
-
     }
 
     public String getActivity() {
@@ -59,6 +61,6 @@ public class Member {
                 getAge(),
                 membership.getType(),
                 getActivity()
-                );
+        );
     }
 }

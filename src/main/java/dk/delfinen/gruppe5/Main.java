@@ -1,6 +1,12 @@
 package dk.delfinen.gruppe5;
 
 
+import dk.delfinen.gruppe5.application.usecase.MemberList;
+import dk.delfinen.gruppe5.domain.model.Member;
+import dk.delfinen.gruppe5.domain.service.ActiveMembership;
+import dk.delfinen.gruppe5.domain.service.PassiveMembership;
+import dk.delfinen.gruppe5.domain.service.Membership;
+
 import java.util.Scanner;
 
 public class Main {
