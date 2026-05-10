@@ -120,7 +120,7 @@ public class ControllerElementer {
             return;
         }
 
-        Boolean editMemberRunning = true;
+        boolean editMemberRunning = true;
         while(editMemberRunning) {
 
             System.out.println("--------------------------------------");

@@ -16,9 +16,10 @@ public class FileMemberSerializer {
                 member.getIsCompetitor(),
                 member.getActivity(),
                 "active",};
-        String csv = "";
+        StringBuilder csv = new StringBuilder();
+
         for (Object field: fields) {
-            csv+= field.toString() + ", ";
+            csv.append(field).append(", ");
         }
 
         return csv.substring(0, csv.length() - 2);

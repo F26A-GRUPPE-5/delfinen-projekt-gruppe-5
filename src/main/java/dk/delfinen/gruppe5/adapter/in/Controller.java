@@ -32,7 +32,7 @@ public class Controller {
         members.setMembers(repository.findAll());
 
 
-        Boolean running = true;
+        boolean running = true;
 
         while (running) {
 
