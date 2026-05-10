@@ -21,6 +21,15 @@ public class MemberList {
         random = new Random();
     }
 
+    public void setMembers(List<Member> membersFromFile) {
+        this.members.addAll(membersFromFile);
+
+        // keep usedIds in sync
+        for (Member m : membersFromFile) {
+            usedIds.add(m.getId());
+        }
+    }
+
     public ArrayList<Member> getMembers() {
         return members;
     }

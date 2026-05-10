@@ -13,6 +13,7 @@ public class Member {
     private boolean isCompetitor;
     private String activity;
     private Membership membership;
+    private boolean hasPaid;
 
 
     public Member(int id, String name, int birthYear, boolean isCompeditor, String activity, Membership membership) {
@@ -22,6 +23,7 @@ public class Member {
         this.isCompetitor = isCompeditor;
         this.activity = activity;
         this.membership = membership;
+        this.hasPaid = false;
     }
 
 
@@ -45,6 +47,9 @@ public class Member {
         return activity;
     }
 
+    public boolean getHasPaid() {
+        return hasPaid;
+    }
 
     public int getAge() {
         int currentYear = Year.now().getValue();
@@ -53,6 +58,30 @@ public class Member {
 
     public double getFee() {
         return membership.calculateFee(getAge());
+    }
+
+    public void setHasPaid(boolean hasPaid) {
+        this.hasPaid = hasPaid;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public void setIsCompetitor(Boolean isCompetitor) {
+        this.isCompetitor = isCompetitor;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
+
+    public void setMembership(Membership membership) {
+        this.membership = membership;
     }
 
     @Override

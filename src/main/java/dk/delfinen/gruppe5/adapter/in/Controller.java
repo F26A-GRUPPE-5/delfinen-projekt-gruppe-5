@@ -1,14 +1,13 @@
 package dk.delfinen.gruppe5.adapter.in;
 // Adapter laget kaldes også infrastructure i Clean Architecture
 
+import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
+import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
+import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.usecase.MemberList;
-import dk.delfinen.gruppe5.domain.model.Member;
-import dk.delfinen.gruppe5.domain.service.ActiveMembership;
-import dk.delfinen.gruppe5.domain.service.Membership;
-import dk.delfinen.gruppe5.domain.service.PassiveMembership;
-import dk.delfinen.gruppe5.adapter.in.Presenter;
 
-import java.util.ArrayList;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 //TODO: Denne skal nok deles op i 2:
@@ -16,22 +15,28 @@ import java.util.Scanner;
 // 2. InputHandler - skal sørges for at hvis input er forkert type, gentages prompten til brugeren. Her kan også parses, altså gøre brugerinput læsbart
 public class Controller {
 
+
+
     static MemberList members = new MemberList();
+    static Presenter presenter = new Presenter();
+
+
+
     public static void main(String[] args) {
-        Presenter presenter = new Presenter();
-        loadMembers();
+
+        Scanner scanner = new Scanner(System.in);
+
+        FileMemberSerializer serializer = new FileMemberSerializer();
+        MemberRepository repository = new FileMemberRepository(serializer, "Members.csv");
+
+        members.setMembers(repository.findAll());
+
 
         Boolean running = true;
 
         while (running) {
-            System.out.println("--------------------------------------");
-            System.out.println("Menu:");
-            System.out.println("1. Tilføj et medlem");
-            System.out.println("2. Slet et medlem");
-            System.out.println("3. Se liste over medlemer");
-            System.out.println("4. Exit");
-            System.out.println("--------------------------------------");
-            Scanner scanner = new Scanner(System.in);
+
+            ControllerElementer.printMenu();
 
             while (!scanner.hasNextInt()) {
                 System.out.println("Indtast et tal: ");
@@ -41,110 +46,83 @@ public class Controller {
 
             switch (inputMenuChoice) {
 
+                //Alt relateret til oprettelse af medlemmer
                 case 1:
-                    appAddMember(scanner, members);
+
+                    ControllerElementer.printMenuMember();
+
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Indtast et tal: ");
+                        scanner.next();
+                    }
+                    int inputMemberChoice = scanner.nextInt();
+
+                    switch (inputMemberChoice) {
+
+                        //Tilføj medlem
+                        case 1:
+                            ControllerElementer.appAddMember(scanner, members);
+                            break;
+
+                        //Slet medlem
+                        case 2:
+                            ControllerElementer.deleteMember(scanner, members.getMembers());
+                            break;
+
+                        //Liste over medlemmer
+                        case 3:
+                            members.sortByActivity();
+                            presenter.printMemberList();
+                            break;
+
+                        //Redigering af medlemmer
+                        case 4:
+                            ControllerElementer.editMember(scanner, members);
+                            break;
+
+                        case 5:
+                            break;
+
+                    }
                     break;
 
+                // Alt relateret til kontigent
                 case 2:
-                    deleteMember(scanner, members.getMembers());
+
+                    ControllerElementer.printMenuKontigent();
+
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Indtast et tal: ");
+                        scanner.next();
+                    }
+                    int inputSubscriptionChoice = scanner.nextInt();
+
+                    switch(inputSubscriptionChoice) {
+
+                        // liste over status af betalte kontigenter
+                        case 1:
+                            presenter.printSubscriptionPaidList();
+                            break;
+
+                        // Marker members som har betalt
+                        case 2:
+                            ControllerElementer.markMemberAsPaid(scanner, members);
+                            break;
+
+                        case 3:
+                            break;
+
+                    }
                     break;
 
                 case 3:
-                    members.sortByActivity();
-
-                    presenter.printMemberlist();
-                    break;
-
-                case 4:
+                    repository.saveAll(members.getMembers());
                     running = false;
 
             }
 
-
-
         }
-
-
 
     }
-
-    public static void appAddMember(Scanner scanner, MemberList memberList) {
-        scanner.nextLine();
-
-        System.out.println("Indtast navnet på personen som skal tilføjes");
-        System.out.println("Navnet:");
-        String name = scanner.nextLine();
-
-        System.out.println("Indtast fødselsåret på personen");
-        System.out.println("Fødselsåret:");
-        int birthYear = scanner.nextInt();
-
-        System.out.println("Er medlemmet konkurrerende?");
-        System.out.println("(ja / nej)");
-        String isCompetitorAnswear = scanner.nextLine();
-        boolean isCompetitor;
-        if (isCompetitorAnswear.equals("ja")) {
-            isCompetitor = true;
-        } else {
-            isCompetitor = false;
-        }
-
-        scanner.nextLine();
-
-        System.out.println("Hvilken aktivitet er han medlem af");
-        String activity = scanner.nextLine();
-
-        System.out.println("Hvilken salgs medlemskab har personen?");
-        System.out.println("(active/passive):");
-        String type = scanner.nextLine();
-
-        Membership membership;
-
-        if (type.equalsIgnoreCase("active")) {
-            membership = new ActiveMembership();
-        } else {
-            membership = new PassiveMembership();
-        }
-
-        members.addMember(name, birthYear, isCompetitor, activity, membership);
-
-        System.out.println("Memberen er blevet oprettet: ");
-
-
-    }
-
-    public static void deleteMember(Scanner scanner, ArrayList<Member> members) {
-        System.out.println("Indtast id nummer på det medlem du vil slette:");
-        int chosenMember = scanner.nextInt();
-
-        Member toRemove = null;
-
-        for (Member member : members) {
-            if (member.getId() == chosenMember) {
-                toRemove = member;
-                break;
-            }
-        }
-
-        if (toRemove != null) {
-            members.remove(toRemove);
-            System.out.println("Du har slettet: ");
-            System.out.println();
-            System.out.println(toRemove);
-        } else {
-            System.out.println("Intet medlem fundet med det Id.");
-        }
-    }
-
-    public static void loadMembers() {
-        Membership active = new ActiveMembership();
-        Membership passive = new PassiveMembership();
-
-        members.addMember("Jørgen", 1940, true, "konkurrencesvømmere", active);
-        members.addMember("Hans Hansen", 2022, true, "konkurrencesvømmer", active);
-        members.addMember("Gert Gertsen", 1920, true, "konkurrencesvømmer",passive);
-        members.addMember("Cay", 1975, true, "konkurrencesvømmer", active);
-    }
-
 
 }
