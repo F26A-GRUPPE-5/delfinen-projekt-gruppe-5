@@ -45,6 +45,13 @@ public class InMemoryMemberRepository implements MemberRepository{
         members = new HashMap<>();
     }
 
+    @Override
+    public void saveAll(List<Member> members) {
+        for (Member member : members) {
+            save(member);
+        }
+    }
+
 
     @Override
     public String toString() {
