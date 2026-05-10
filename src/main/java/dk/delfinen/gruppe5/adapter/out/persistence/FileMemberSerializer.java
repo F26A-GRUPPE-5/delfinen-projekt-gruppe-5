@@ -2,8 +2,6 @@ package dk.delfinen.gruppe5.adapter.out.persistence;
 
 import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
-import dk.delfinen.gruppe5.domain.service.Membership;
-import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 
 //TODO: Dennes job er at oversætte mellem member objektet og filer, for eksempel CSV
 public class FileMemberSerializer {
@@ -18,9 +16,10 @@ public class FileMemberSerializer {
                 member.getIsCompetitor(),
                 member.getActivity(),
                 "active",};
-        String csv = "";
+        StringBuilder csv = new StringBuilder();
+
         for (Object field: fields) {
-                csv+= field.toString() + ", ";
+            csv.append(field).append(", ");
         }
 
         return csv.substring(0, csv.length() - 2);
@@ -36,6 +35,6 @@ public class FileMemberSerializer {
                 Boolean.parseBoolean(tokenized[3]),
                 tokenized[4],
                 new ActiveMembership()
-                );
+        );
     }
 }

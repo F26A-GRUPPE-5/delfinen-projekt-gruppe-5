@@ -13,4 +13,5 @@ public interface MemberRepository {
     void delete(int id);
     List<Member> findAll();
     void clearAll();
+    void saveAll(List<Member> members);
 }

@@ -18,6 +18,8 @@ public class FileMemberRepository implements MemberRepository {
     public FileMemberRepository(FileMemberSerializer memberSerializer, String filePath) {
         this.memberSerializer = memberSerializer;
         this.filePath = filePath;
+
+        ensureFileExists();
         parseLines();
     }
 
@@ -56,6 +58,16 @@ public class FileMemberRepository implements MemberRepository {
         writeFile();
     }
 
+    public void saveAll(List<Member> members) {
+        lines.clear();
+
+        for (Member m : members) {
+            lines.add(memberSerializer.toCSV(m));
+        }
+
+        writeFile();
+    }
+
     @Override
     public void delete(int id) {
         Iterator<String> it = lines.iterator();
@@ -89,7 +101,7 @@ public class FileMemberRepository implements MemberRepository {
         List<String> result = new ArrayList<>();
 
         try {
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
             String line;
             while ((line = reader.readLine()) != null) {
                 result.add(line);
@@ -112,6 +124,20 @@ public class FileMemberRepository implements MemberRepository {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void ensureFileExists() {
+        try {
+            File file = new File(filePath);
+
+            if (!file.exists()) {
+                file.createNewFile();
+                System.out.println("Members.csv blev oprettet.");
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Kunne ikke oprette filen: " + filePath, e);
         }
     }
 }
