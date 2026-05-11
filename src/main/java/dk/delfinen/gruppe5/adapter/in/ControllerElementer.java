@@ -1,6 +1,5 @@
 package dk.delfinen.gruppe5.adapter.in;
 
-import dk.delfinen.gruppe5.InputHandler;
 import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
 //import dk.delfinen.gruppe5.application.port.in.EditMemberUseCase;
 import dk.delfinen.gruppe5.application.port.in.ListMembersUseCase;
@@ -13,7 +12,6 @@ import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ControllerElementer {
@@ -25,6 +23,7 @@ public class ControllerElementer {
     MemberRepository memberRepository;
 
     Presenter presenter;
+    InputHandler inputHandler;
 
     public ControllerElementer(IdGenerator idGenerator, MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -33,6 +32,7 @@ public class ControllerElementer {
         registerMember = new RegisterMemberUseCaseImpl(idGenerator, memberRepository);
         listMembers = new ListMembersUseCaseImpl();
         presenter = new Presenter(memberRepository);
+        inputHandler = new InputHandler();
     }
 
 
@@ -72,7 +72,7 @@ public class ControllerElementer {
 
         System.out.println("Indtast fødselsåret på personen");
         System.out.println("Fødselsåret:");
-        int birthYear = InputHandler.getInt(scanner, "Fødselsåret: ");
+        int birthYear = inputHandler.getInt(scanner, "Fødselsåret: ");
 
         System.out.println("Er medlemmet konkurrerende?");
         System.out.println("(ja / nej)");
@@ -110,7 +110,7 @@ public class ControllerElementer {
     public void deleteMember(Scanner scanner) {
         System.out.println("Indtast id nummer på det medlem du vil slette:");
 
-        int chosenMemberId = InputHandler.getInt(scanner, "Indtast id nummer på det medlem fu vil slette:");;
+        int chosenMemberId = inputHandler.getInt(scanner, "Indtast id nummer på det medlem fu vil slette:");;
         deleteMember.execute(chosenMemberId);
 
     }
@@ -119,7 +119,7 @@ public class ControllerElementer {
 
         presenter.printMemberList();
         System.out.println("Indtast id'et på det medlem du vil redigere: ");
-        int id = InputHandler.getInt(scanner, "Indtast id'et på det medlem du vil redigere: ");
+        int id = inputHandler.getInt(scanner, "Indtast id'et på det medlem du vil redigere: ");
 
         Member memberToEdit = memberRepository.find(id);
 
@@ -141,7 +141,7 @@ public class ControllerElementer {
 
             System.out.println("--------------------------------------");
             System.out.println("Indtast nr på handling:  ");
-            int inputEditChoice = InputHandler.getInt(scanner, "Indtast nr på handling: ");
+            int inputEditChoice = inputHandler.getInt(scanner, "Indtast nr på handling: ");
             scanner.nextLine();
 
             switch (inputEditChoice) {
@@ -156,7 +156,7 @@ public class ControllerElementer {
                 // int birthYear
                 case 2:
                     System.out.println("Nyt fødselsår:");
-                    int birthYear = InputHandler.getInt(scanner, "Nyt fødselsår: ");
+                    int birthYear = inputHandler.getInt(scanner, "Nyt fødselsår: ");
                     scanner.nextLine();
                     memberToEdit.setBirthYear(birthYear);
                     break;
@@ -196,7 +196,7 @@ public class ControllerElementer {
 
     public void markMemberAsPaid(Scanner scanner) {
         System.out.println("Indtast ID på medlem der har betalt:");
-        int id = InputHandler.getInt(scanner, "Indtast ID på medlem der har betalt: ");
+        int id = inputHandler.getInt(scanner, "Indtast ID på medlem der har betalt: ");
 
         Member member = memberRepository.find(id);
 

@@ -1,7 +1,6 @@
 package dk.delfinen.gruppe5.adapter.in;
 // Adapter laget kaldes også infrastructure i Clean Architecture
 
-import dk.delfinen.gruppe5.InputHandler;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
 import dk.delfinen.gruppe5.adapter.out.persistence.InMemoryMemberRepository;
@@ -26,7 +25,8 @@ public class Controller {
     IdGenerator idGenerator;
     ControllerElementer controllerElementer;
     // MemberList members = new MemberList();
-    Presenter presenter = new Presenter();
+    InputHandler inputHandler;
+
 
     public Controller() {
         members = new InMemoryMemberRepository();
@@ -35,6 +35,7 @@ public class Controller {
         sortMembers = new SortMembersUseCaseImpl();
         registerMember = new RegisterMemberUseCaseImpl(idGenerator, members);
         controllerElementer = new ControllerElementer(idGenerator, members);
+        inputHandler = new InputHandler();
     }
 
 
@@ -56,7 +57,7 @@ public class Controller {
 
             controllerElementer.printMenu();
 
-            int inputMenuChoice = InputHandler.getInt(scanner, "Indtast et tal:");
+            int inputMenuChoice = inputHandler.getInt(scanner, "Indtast et tal:");
 
             switch (inputMenuChoice) {
 
@@ -65,7 +66,7 @@ public class Controller {
 
                     controllerElementer.printMenuMember();
 
-                    int inputMemberChoice = InputHandler.getInt(scanner, "Indtast et tal: ");
+                    int inputMemberChoice = inputHandler.getInt(scanner, "Indtast et tal: ");
 
                     switch (inputMemberChoice) {
 
@@ -102,7 +103,7 @@ public class Controller {
 
                     controllerElementer.printMenuKontigent();
 
-                    int inputSubscriptionChoice = InputHandler.getInt(scanner, "Indtast et tal: ");
+                    int inputSubscriptionChoice = inputHandler.getInt(scanner, "Indtast et tal: ");
                     switch (inputSubscriptionChoice) {
                     }
 
