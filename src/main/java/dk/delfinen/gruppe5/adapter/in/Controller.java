@@ -1,6 +1,7 @@
 package dk.delfinen.gruppe5.adapter.in;
 // Adapter laget kaldes også infrastructure i Clean Architecture
 
+import dk.delfinen.gruppe5.InputHandler;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
@@ -16,10 +17,8 @@ import java.util.Scanner;
 public class Controller {
 
 
-
     static MemberList members = new MemberList();
     static Presenter presenter = new Presenter();
-
 
 
     public static void main(String[] args) {
@@ -38,11 +37,7 @@ public class Controller {
 
             ControllerElementer.printMenu();
 
-            while (!scanner.hasNextInt()) {
-                System.out.println("Indtast et tal: ");
-                scanner.next();
-            }
-            int inputMenuChoice = scanner.nextInt();
+            int inputMenuChoice = InputHandler.getInt(scanner, "Indtast et tal:");
 
             switch (inputMenuChoice) {
 
@@ -51,11 +46,7 @@ public class Controller {
 
                     ControllerElementer.printMenuMember();
 
-                    while (!scanner.hasNextInt()) {
-                        System.out.println("Indtast et tal: ");
-                        scanner.next();
-                    }
-                    int inputMemberChoice = scanner.nextInt();
+                    int inputMemberChoice = InputHandler.getInt(scanner, "Indtast et tal: ");
 
                     switch (inputMemberChoice) {
 
@@ -91,13 +82,11 @@ public class Controller {
 
                     ControllerElementer.printMenuKontigent();
 
-                    while (!scanner.hasNextInt()) {
-                        System.out.println("Indtast et tal: ");
-                        scanner.next();
+                    int inputSubscriptionChoice = InputHandler.getInt(scanner, "Indtast et tal: ");
+                    switch (inputSubscriptionChoice) {
                     }
-                    int inputSubscriptionChoice = scanner.nextInt();
 
-                    switch(inputSubscriptionChoice) {
+                    switch (inputSubscriptionChoice) {
 
                         // liste over status af betalte kontigenter
                         case 1:
@@ -119,10 +108,12 @@ public class Controller {
                     repository.saveAll(members.getMembers());
                     running = false;
 
+
             }
 
         }
 
     }
-
 }
+
+
