@@ -4,38 +4,57 @@ package dk.delfinen.gruppe5.adapter.in;
 import dk.delfinen.gruppe5.InputHandler;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
+import dk.delfinen.gruppe5.adapter.out.persistence.InMemoryMemberRepository;
+import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
+import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
+import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
-import dk.delfinen.gruppe5.application.usecase.MemberList;
+import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
+import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
+import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 //TODO: Denne skal nok deles op i 2:
 // 1. Router - Her defineres menu navigationen, hvilken text der skal stå, og der matches med en use case.
 // 2. InputHandler - skal sørges for at hvis input er forkert type, gentages prompten til brugeren. Her kan også parses, altså gøre brugerinput læsbart
 public class Controller {
+    MemberRepository members;
+    Presenter presenter;
+    RegisterMemberUseCase registerMember;
+    SortMembersUseCase sortMembers;
+    IdGenerator idGenerator;
+    ControllerElementer controllerElementer;
+    // MemberList members = new MemberList();
+    Presenter presenter = new Presenter();
+
+    public Controller() {
+        members = new InMemoryMemberRepository();
+        presenter = new Presenter(members);
+        idGenerator = new RandomIdGenerator();
+        sortMembers = new SortMembersUseCaseImpl();
+        registerMember = new RegisterMemberUseCaseImpl(idGenerator, members);
+        controllerElementer = new ControllerElementer(idGenerator, members);
+    }
 
 
-    static MemberList members = new MemberList();
-    static Presenter presenter = new Presenter();
 
 
-    public static void main(String[] args) {
+
+    public void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
         FileMemberSerializer serializer = new FileMemberSerializer();
         MemberRepository repository = new FileMemberRepository(serializer, "Members.csv");
 
-        members.setMembers(repository.findAll());
 
 
         boolean running = true;
 
         while (running) {
 
-            ControllerElementer.printMenu();
+            controllerElementer.printMenu();
 
             int inputMenuChoice = InputHandler.getInt(scanner, "Indtast et tal:");
 
@@ -44,7 +63,7 @@ public class Controller {
                 //Alt relateret til oprettelse af medlemmer
                 case 1:
 
-                    ControllerElementer.printMenuMember();
+                    controllerElementer.printMenuMember();
 
                     int inputMemberChoice = InputHandler.getInt(scanner, "Indtast et tal: ");
 
@@ -52,23 +71,24 @@ public class Controller {
 
                         //Tilføj medlem
                         case 1:
-                            ControllerElementer.appAddMember(scanner, members);
+                            controllerElementer.appAddMember(scanner);
                             break;
 
                         //Slet medlem
                         case 2:
-                            ControllerElementer.deleteMember(scanner, members.getMembers());
+                            controllerElementer.deleteMember(scanner);
                             break;
 
                         //Liste over medlemmer
                         case 3:
-                            members.sortByActivity();
+
+                            sortMembers.sortByActivity(members.findAll());
                             presenter.printMemberList();
                             break;
 
                         //Redigering af medlemmer
                         case 4:
-                            ControllerElementer.editMember(scanner, members);
+                            controllerElementer.editMember(scanner);
                             break;
 
                         case 5:
@@ -80,7 +100,7 @@ public class Controller {
                 // Alt relateret til kontigent
                 case 2:
 
-                    ControllerElementer.printMenuKontigent();
+                    controllerElementer.printMenuKontigent();
 
                     int inputSubscriptionChoice = InputHandler.getInt(scanner, "Indtast et tal: ");
                     switch (inputSubscriptionChoice) {
@@ -95,7 +115,7 @@ public class Controller {
 
                         // Marker members som har betalt
                         case 2:
-                            ControllerElementer.markMemberAsPaid(scanner, members);
+                            controllerElementer.markMemberAsPaid(scanner);
                             break;
 
                         case 3:
@@ -105,7 +125,7 @@ public class Controller {
                     break;
 
                 case 3:
-                    repository.saveAll(members.getMembers());
+                    repository.saveAll(members.findAll());
                     running = false;
 
 

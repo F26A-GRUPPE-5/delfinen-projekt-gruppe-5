@@ -1,7 +1,13 @@
 package dk.delfinen.gruppe5.adapter.in;
 
 import dk.delfinen.gruppe5.InputHandler;
-import dk.delfinen.gruppe5.application.usecase.MemberList;
+import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
+//import dk.delfinen.gruppe5.application.port.in.EditMemberUseCase;
+import dk.delfinen.gruppe5.application.port.in.ListMembersUseCase;
+import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
+import dk.delfinen.gruppe5.application.port.out.IdGenerator;
+import dk.delfinen.gruppe5.application.port.out.MemberRepository;
+import dk.delfinen.gruppe5.application.usecase.*;
 import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
@@ -11,9 +17,26 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ControllerElementer {
-    static Presenter presenter = new Presenter();
+    DeleteMemberUseCase deleteMember;
+    //EditMemberUseCase editMember;
+    RegisterMemberUseCase registerMember;
+    ListMembersUseCase listMembers;
 
-    public static void printMenu() {
+    MemberRepository memberRepository;
+
+    Presenter presenter;
+
+    public ControllerElementer(IdGenerator idGenerator, MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+        deleteMember = new DeleteMemberUseCaseImpl(memberRepository);
+        //editMember = new EditMemberUseCaseImpl();
+        registerMember = new RegisterMemberUseCaseImpl(idGenerator, memberRepository);
+        listMembers = new ListMembersUseCaseImpl();
+        presenter = new Presenter(memberRepository);
+    }
+
+
+    public void printMenu() {
         System.out.println("--------------------------------------");
         System.out.println("Menu:");
         System.out.println("1. Medlemmer");
@@ -22,7 +45,7 @@ public class ControllerElementer {
         System.out.println("--------------------------------------");
     }
 
-    public static void printMenuMember() {
+    public void printMenuMember() {
         System.out.println("--------------------------------------");
         System.out.println("1. Tilføj et medlem");
         System.out.println("2. Slet et medlem");
@@ -32,7 +55,7 @@ public class ControllerElementer {
         System.out.println("--------------------------------------");
     }
 
-    public static void printMenuKontigent() {
+    public void printMenuKontigent() {
         System.out.println("--------------------------------------");
         System.out.println("1. Se liste over kontigent statuser");
         System.out.println("2. Marker et medlem som betalt");
@@ -40,7 +63,7 @@ public class ControllerElementer {
         System.out.println("--------------------------------------");
     }
 
-    public static void appAddMember(Scanner scanner, MemberList members) {
+    public void appAddMember(Scanner scanner) {
         scanner.nextLine();
 
         System.out.println("Indtast navnet på personen som skal tilføjes");
@@ -78,42 +101,27 @@ public class ControllerElementer {
             membership = new PassiveMembership();
         }
 
-        members.addMember(name, birthYear, isCompetitor, activity, membership);
+        registerMember.execute(name, birthYear, isCompetitor, activity, membership);
 
         System.out.println("Memberen er blevet oprettet: ");
 
     }
 
-    public static void deleteMember(Scanner scanner, ArrayList<Member> members) {
+    public void deleteMember(Scanner scanner) {
         System.out.println("Indtast id nummer på det medlem du vil slette:");
-        int chosenMember = InputHandler.getInt(scanner, "Indtast id nummer på det medlem fu vil slette:");
 
-        Member toRemove = null;
+        int chosenMemberId = InputHandler.getInt(scanner, "Indtast id nummer på det medlem fu vil slette:");;
+        deleteMember.execute(chosenMemberId);
 
-        for (Member member : members) {
-            if (member.getId() == chosenMember) {
-                toRemove = member;
-                break;
-            }
-        }
-
-        if (toRemove != null) {
-            members.remove(toRemove);
-            System.out.println("Du har slettet: ");
-            System.out.println();
-            System.out.println(toRemove);
-        } else {
-            System.out.println("Intet medlem fundet med det Id. ");
-        }
     }
 
-    public static void editMember(Scanner scanner, MemberList members) {
+    public void editMember(Scanner scanner) {
 
         presenter.printMemberList();
         System.out.println("Indtast id'et på det medlem du vil redigere: ");
         int id = InputHandler.getInt(scanner, "Indtast id'et på det medlem du vil redigere: ");
 
-        Member memberToEdit = members.getMemberById(id);
+        Member memberToEdit = memberRepository.find(id);
 
         if (memberToEdit == null) {
             System.out.println("Intet medlem kunne finde med det id");
@@ -183,21 +191,14 @@ public class ControllerElementer {
                     editMemberRunning = false;
                     break;
             }
-
-
-
-
         }
-
-
-
     }
 
-    public static void markMemberAsPaid(Scanner scanner, MemberList members) {
+    public void markMemberAsPaid(Scanner scanner) {
         System.out.println("Indtast ID på medlem der har betalt:");
         int id = InputHandler.getInt(scanner, "Indtast ID på medlem der har betalt: ");
 
-        Member member = members.getMemberById(id);
+        Member member = memberRepository.find(id);
 
         if (member != null) {
             member.setHasPaid(true);
