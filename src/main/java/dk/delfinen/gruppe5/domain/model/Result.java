@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Result {
 
-    Discipline discipline;
+    String discipline;
     int time;
 
 
