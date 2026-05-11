@@ -26,7 +26,7 @@ public class Controller {
     ControllerElementer controllerElementer;
 
     public Controller() {
-        members = new InMemoryMemberRepository();
+        members = new MemberRepository();
         presenter = new Presenter(members);
         idGenerator = new RandomIdGenerator();
         sortMembers = new SortMembersUseCaseImpl();
