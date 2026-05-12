@@ -40,7 +40,7 @@ public class ControllerElementer {
         System.out.println("--------------------------------------");
         System.out.println("Menu:");
         System.out.println("1. Medlemmer");
-        System.out.println("2. Konkigent");
+        System.out.println("2. Kontingent");
         System.out.println("3. Exit / Save");
         System.out.println("--------------------------------------");
     }
@@ -55,7 +55,7 @@ public class ControllerElementer {
         System.out.println("--------------------------------------");
     }
 
-    public void printMenuKontigent() {
+    public void printMenuKontingent() {
         System.out.println("--------------------------------------");
         System.out.println("1. Se liste over kontigent statuser");
         System.out.println("2. Marker et medlem som betalt");

@@ -21,10 +21,10 @@ public class Main {
                         new FileMemberSerializer(),
                         "src/main/java/data/Members.csv"
                 );
-        memberRepository.clearAll();
+        //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
 
         Controller controller = new Controller();
-        controller.main(args);
+        controller.start();
 //
 //
 //        Scanner scanner = new Scanner(System.in);

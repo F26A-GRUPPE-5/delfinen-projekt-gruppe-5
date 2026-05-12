@@ -29,7 +29,13 @@ public class Controller {
 
 
     public Controller() {
-        members = new InMemoryMemberRepository();
+
+        FileMemberSerializer serializer = new FileMemberSerializer();
+
+        members = new FileMemberRepository(serializer, "Members.csv");
+        // MemberRepository repository = new FileMemberRepository(serializer, "Members.csv"); Ændret unødvendig
+
+        //members = new InMemoryMemberRepository();
         presenter = new Presenter(members);
         idGenerator = new RandomIdGenerator();
         sortMembers = new SortMembersUseCaseImpl();
@@ -42,12 +48,11 @@ public class Controller {
 
 
 
-    public void main(String[] args) {
+    public void start() {
 
         Scanner scanner = new Scanner(System.in);
 
-        FileMemberSerializer serializer = new FileMemberSerializer();
-        MemberRepository repository = new FileMemberRepository(serializer, "Members.csv");
+
 
 
 
@@ -98,10 +103,10 @@ public class Controller {
                     }
                     break;
 
-                // Alt relateret til kontigent
+                // Alt relateret til kontingent
                 case 2:
 
-                    controllerElementer.printMenuKontigent();
+                    controllerElementer.printMenuKontingent();
 
                     int inputSubscriptionChoice = inputHandler.getInt(scanner, "Indtast et tal: ");
                     switch (inputSubscriptionChoice) {
@@ -109,7 +114,7 @@ public class Controller {
 
                     switch (inputSubscriptionChoice) {
 
-                        // liste over status af betalte kontigenter
+                        // liste over status af betalte kontingenter
                         case 1:
                             presenter.printSubscriptionPaidList();
                             break;
@@ -126,7 +131,7 @@ public class Controller {
                     break;
 
                 case 3:
-                    repository.saveAll(members.findAll());
+                    members.saveAll(members.findAll());
                     running = false;
 
 
