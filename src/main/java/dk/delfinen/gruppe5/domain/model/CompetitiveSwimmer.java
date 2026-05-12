@@ -11,15 +11,15 @@ public class CompetitiveSwimmer {
     private Trainer trainer;
 
     private ArrayList<Result> results;
-    public void addResult(Result result) {
-        results.add(result);
-    }
 
     //kontruktør
     public CompetitiveSwimmer(Member member, Trainer trainer) {
         this.member = member;
         this.trainer = trainer;
         results = new ArrayList<>();
+    }
+    public void addResult(Result result) {
+        results.add(result);
     }
 
     // getter
