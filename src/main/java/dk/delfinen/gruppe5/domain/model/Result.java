@@ -7,6 +7,4 @@ public class Result {
     String discipline;
     int time;
 
-
-
 }
