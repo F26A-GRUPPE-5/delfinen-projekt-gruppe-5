@@ -39,7 +39,6 @@ public class CompetitiveSwimmer {
         return new ArrayList<>(results.subList(0, Math.min(5, results.size())));
     }
 
-
     // setter
     public void setMember(Member member) {
         this.member = member;
