@@ -31,4 +31,3 @@ class MemberCRUDAcceptanceTest {
             assertFalse(repo.exists(1));
         }
     }
-}

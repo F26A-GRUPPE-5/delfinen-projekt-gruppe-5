@@ -1,6 +1,8 @@
 package dk.delfinen.gruppe5.domain.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CompetitiveSwimmer {
 
@@ -9,6 +11,9 @@ public class CompetitiveSwimmer {
     private Trainer trainer;
 
     private ArrayList<Result> results;
+    public void addResult(Result result) {
+        results.add(result);
+    }
 
     //kontruktør
     public CompetitiveSwimmer(Member member, Trainer trainer) {
@@ -28,6 +33,10 @@ public class CompetitiveSwimmer {
 
     public ArrayList<Result> getResults() {
         return results;
+    }
+    public ArrayList<Result> getTopFiveResults(){
+        Collections.sort(results, Comparator.comparingInt(Result::getTime));
+        return new ArrayList<>(results.subList(0, Math.min(5, results.size())));
     }
 
 
