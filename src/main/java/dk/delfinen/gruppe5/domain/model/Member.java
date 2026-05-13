@@ -16,11 +16,11 @@ public class Member {
     private boolean hasPaid;
 
 
-    public Member(int id, String name, int birthYear, boolean isCompeditor, String activity, Membership membership) {
+    public Member(int id, String name, int birthYear, boolean isCompetitor, String activity, Membership membership) {
         this.id = id;
         this.name = name;
         this.birthYear = birthYear;
-        this.isCompetitor = isCompeditor;
+        this.isCompetitor = isCompetitor;
         this.activity = activity;
         this.membership = membership;
         this.hasPaid = false;
