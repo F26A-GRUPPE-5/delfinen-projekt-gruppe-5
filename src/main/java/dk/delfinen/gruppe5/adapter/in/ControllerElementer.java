@@ -32,7 +32,7 @@ public class ControllerElementer {
         registerMember = new RegisterMemberUseCaseImpl(idGenerator, memberRepository);
         listMembers = new ListMembersUseCaseImpl();
         presenter = new Presenter(memberRepository);
-        inputHandler = new InputHandler();
+        inputHandler = new InputHandler(new Scanner(System.in));
     }
 
 
@@ -72,7 +72,7 @@ public class ControllerElementer {
 
         System.out.println("Indtast fødselsåret på personen");
         System.out.println("Fødselsåret:");
-        int birthYear = inputHandler.getInt(scanner, "Fødselsåret: ");
+        int birthYear = inputHandler.getInt("Fødselsåret: ");
 
         System.out.println("Er medlemmet konkurrerende?");
         System.out.println("(ja / nej)");
@@ -110,7 +110,7 @@ public class ControllerElementer {
     public void deleteMember(Scanner scanner) {
         System.out.println("Indtast id nummer på det medlem du vil slette:");
 
-        int chosenMemberId = inputHandler.getInt(scanner, "Indtast id nummer på det medlem fu vil slette:");;
+        int chosenMemberId = inputHandler.getInt("Indtast id nummer på det medlem fu vil slette:");;
         deleteMember.execute(chosenMemberId);
 
     }
@@ -119,7 +119,7 @@ public class ControllerElementer {
 
         presenter.printMemberList();
         System.out.println("Indtast id'et på det medlem du vil redigere: ");
-        int id = inputHandler.getInt(scanner, "Indtast id'et på det medlem du vil redigere: ");
+        int id = inputHandler.getInt("Indtast id'et på det medlem du vil redigere: ");
 
         Member memberToEdit = memberRepository.find(id);
 
@@ -141,7 +141,7 @@ public class ControllerElementer {
 
             System.out.println("--------------------------------------");
             System.out.println("Indtast nr på handling:  ");
-            int inputEditChoice = inputHandler.getInt(scanner, "Indtast nr på handling: ");
+            int inputEditChoice = inputHandler.getInt("Indtast nr på handling: ");
             scanner.nextLine();
 
             switch (inputEditChoice) {
@@ -156,7 +156,7 @@ public class ControllerElementer {
                 // int birthYear
                 case 2:
                     System.out.println("Nyt fødselsår:");
-                    int birthYear = inputHandler.getInt(scanner, "Nyt fødselsår: ");
+                    int birthYear = inputHandler.getInt("Nyt fødselsår: ");
                     scanner.nextLine();
                     memberToEdit.setBirthYear(birthYear);
                     break;
@@ -196,7 +196,7 @@ public class ControllerElementer {
 
     public void markMemberAsPaid(Scanner scanner) {
         System.out.println("Indtast ID på medlem der har betalt:");
-        int id = inputHandler.getInt(scanner, "Indtast ID på medlem der har betalt: ");
+        int id = inputHandler.getInt("Indtast ID på medlem der har betalt: ");
 
         Member member = memberRepository.find(id);
 

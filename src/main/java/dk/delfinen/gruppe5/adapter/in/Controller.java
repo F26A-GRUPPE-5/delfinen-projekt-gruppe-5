@@ -41,7 +41,7 @@ public class Controller {
         sortMembers = new SortMembersUseCaseImpl();
         registerMember = new RegisterMemberUseCaseImpl(idGenerator, members);
         controllerElementer = new ControllerElementer(idGenerator, members);
-        inputHandler = new InputHandler();
+        inputHandler = new InputHandler(new Scanner(System.in));
     }
 
 
@@ -62,7 +62,7 @@ public class Controller {
 
             controllerElementer.printMenu();
 
-            int inputMenuChoice = inputHandler.getInt(scanner, "Indtast et tal:");
+            int inputMenuChoice = inputHandler.getInt("Indtast et tal:");
 
             switch (inputMenuChoice) {
 
@@ -71,7 +71,7 @@ public class Controller {
 
                     controllerElementer.printMenuMember();
 
-                    int inputMemberChoice = inputHandler.getInt(scanner, "Indtast et tal: ");
+                    int inputMemberChoice = inputHandler.getInt("Indtast et tal: ");
 
                     switch (inputMemberChoice) {
 
@@ -108,7 +108,7 @@ public class Controller {
 
                     controllerElementer.printMenuKontingent();
 
-                    int inputSubscriptionChoice = inputHandler.getInt(scanner, "Indtast et tal: ");
+                    int inputSubscriptionChoice = inputHandler.getInt("Indtast et tal: ");
                     switch (inputSubscriptionChoice) {
                     }
 

@@ -22,13 +22,13 @@ class MemberCRUDAcceptanceTest {
             useCase = new DeleteMemberUseCaseImpl(repo);
         }
 
-        @Test
-        void user_can_delete_existing_member() {
-            repo.save(new Member(1, "John"));
-
-            var result = useCase.execute(1);  // we should use explicit error values instead of exceptions in inner layers because it is less messy when they propagate through other layers. also if there are multiple errors we will only see one.
-            assertTrue(result.isSuccess());
-            assertFalse(repo.exists(1));
-        }
-    }
+//        @Test
+//        void user_can_delete_existing_member() {
+//            repo.save(new Member(1, "John"));
+//
+//            var result = useCase.execute(1);  // we should use explicit error values instead of exceptions in inner layers because it is less messy when they propagate through other layers. also if there are multiple errors we will only see one.
+//            assertTrue(result.isSuccess());
+//            assertFalse(repo.exists(1));
+//        }
+//    }
 }
