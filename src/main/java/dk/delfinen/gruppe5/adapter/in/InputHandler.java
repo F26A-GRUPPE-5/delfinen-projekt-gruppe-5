@@ -4,13 +4,20 @@ import java.util.Scanner;
 
 public class InputHandler {
 
-    public int getInt(Scanner scanner, String promt) {
-        System.out.println(promt);
-        while (!scanner.hasNextInt()) {
-            scanner.next();
-            System.out.println("Forkert input ");
-        }
-        return scanner.nextInt();
+    private final InputParser parser;
 
+    public InputHandler(Scanner scanner) {
+        this.parser = new InputParser(scanner);
+    }
+
+    public int getInt(String prompt) {
+        System.out.println(prompt);
+        while (true) {
+            try {
+                return parser.parseInt();
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage() + " prøv igen.");
+            }
+        }
     }
 }
