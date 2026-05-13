@@ -16,9 +16,9 @@ public class RegisterMemberUseCaseImpl implements RegisterMemberUseCase {
     }
 
     @Override
-    public void execute (String name, int birthYear, boolean isCompetitor, String activity, Membership membership) {
+    public void execute (String name, int birthYear, boolean isCompetitor, String activity, Membership membership, boolean hasPaid) {
         int id = idGenerator.nextId();
-        Member member = new Member(id, name, birthYear, isCompetitor, activity, membership);
+        Member member = new Member(id, name, birthYear, isCompetitor, activity, membership, hasPaid);
         memberRepository.save(member);
     }
 }

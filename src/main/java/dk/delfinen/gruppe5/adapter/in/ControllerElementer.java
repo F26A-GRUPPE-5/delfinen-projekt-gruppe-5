@@ -64,14 +64,11 @@ public class ControllerElementer {
     }
 
     public void appAddMember(Scanner scanner) {
-        scanner.nextLine();
-
         System.out.println("Indtast navnet på personen som skal tilføjes");
         System.out.println("Navnet:");
         String name = scanner.nextLine();
 
         System.out.println("Indtast fødselsåret på personen");
-        System.out.println("Fødselsåret:");
         int birthYear = inputHandler.getInt("Fødselsåret: ");
 
         System.out.println("Er medlemmet konkurrerende?");
@@ -83,8 +80,6 @@ public class ControllerElementer {
         } else {
             isCompetitor = false;
         }
-
-        scanner.nextLine();
 
         System.out.println("Hvilken aktivitet er han medlem af");
         String activity = scanner.nextLine();
@@ -101,16 +96,15 @@ public class ControllerElementer {
             membership = new PassiveMembership();
         }
 
-        registerMember.execute(name, birthYear, isCompetitor, activity, membership);
+        registerMember.execute(name, birthYear, isCompetitor, activity, membership, false);
 
         System.out.println("Memberen er blevet oprettet: ");
 
     }
 
     public void deleteMember(Scanner scanner) {
-        System.out.println("Indtast id nummer på det medlem du vil slette:");
-
-        int chosenMemberId = inputHandler.getInt("Indtast id nummer på det medlem fu vil slette:");;
+        System.out.println("Indtast id nummer på det medlem du vil slette");
+        int chosenMemberId = inputHandler.getInt("Id'et:");;
         deleteMember.execute(chosenMemberId);
 
     }
@@ -119,7 +113,7 @@ public class ControllerElementer {
 
         presenter.printMemberList();
         System.out.println("Indtast id'et på det medlem du vil redigere: ");
-        int id = inputHandler.getInt("Indtast id'et på det medlem du vil redigere: ");
+        int id = inputHandler.getInt("Id'et: ");
 
         Member memberToEdit = memberRepository.find(id);
 
@@ -140,7 +134,6 @@ public class ControllerElementer {
             System.out.println("6. Exit");
 
             System.out.println("--------------------------------------");
-            System.out.println("Indtast nr på handling:  ");
             int inputEditChoice = inputHandler.getInt("Indtast nr på handling: ");
             scanner.nextLine();
 
@@ -156,7 +149,7 @@ public class ControllerElementer {
                 // int birthYear
                 case 2:
                     System.out.println("Nyt fødselsår:");
-                    int birthYear = inputHandler.getInt("Nyt fødselsår: ");
+                    int birthYear = inputHandler.getInt("Året: ");
                     scanner.nextLine();
                     memberToEdit.setBirthYear(birthYear);
                     break;
@@ -196,7 +189,7 @@ public class ControllerElementer {
 
     public void markMemberAsPaid(Scanner scanner) {
         System.out.println("Indtast ID på medlem der har betalt:");
-        int id = inputHandler.getInt("Indtast ID på medlem der har betalt: ");
+        int id = inputHandler.getInt("Id'et: ");
 
         Member member = memberRepository.find(id);
 

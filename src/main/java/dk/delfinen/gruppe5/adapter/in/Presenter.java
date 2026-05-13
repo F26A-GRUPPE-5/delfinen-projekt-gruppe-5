@@ -1,6 +1,7 @@
 package dk.delfinen.gruppe5.adapter.in;
 
 
+import dk.delfinen.gruppe5.adapter.out.persistence.InMemoryMemberRepository;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.domain.model.Member;
 

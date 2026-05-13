@@ -32,7 +32,7 @@ public class Controller {
 
         FileMemberSerializer serializer = new FileMemberSerializer();
 
-        members = new FileMemberRepository(serializer, "Members.csv");
+        members = new FileMemberRepository(serializer, "src/main/java/data/Members.csv");
         // MemberRepository repository = new FileMemberRepository(serializer, "Members.csv"); Ændret unødvendig
 
         //members = new InMemoryMemberRepository();
@@ -51,10 +51,6 @@ public class Controller {
     public void start() {
 
         Scanner scanner = new Scanner(System.in);
-
-
-
-
 
         boolean running = true;
 
