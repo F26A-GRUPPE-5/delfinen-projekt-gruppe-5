@@ -1,6 +1,8 @@
 package dk.delfinen.gruppe5.domain.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CompetitiveSwimmer {
 
@@ -11,7 +13,8 @@ public class CompetitiveSwimmer {
 
     // Liste som gemmer svømmerens resultater
     // ArrayList betyder at vi kan gemme flere Result objekter.
-    private ArrayList<Result> results;
+    private ArrayList<MeetResult> meetResults;
+    private ArrayList<TrainingResult> trainingResults;
 
     // ArrayList betyder at vi kan gemme flere Result objekter. foreksempel CRAWL, BUTTERFLY osv.
     // med andre ord “Der skal findes en variabel som hedder disciplines”. Men listen er endnu IKKE oprettet. Det sker nedenunder
@@ -24,11 +27,19 @@ public class CompetitiveSwimmer {
         // Gemmer trainer objektet i instansvariablen trainer
         this.trainer = trainer;
         // Opretter en tom liste til resultater. Så vi senere kan tilføje resultater med add()
-        results = new ArrayList<>();
+        meetResults = new ArrayList<>();
+        trainingResults = new ArrayList<>();
         // Opretter en tom liste til discipliner. Så vi senere kan tilføje discipliner med add()
         //Sagt med andre ord: Her bliver listen faktisk oprettet i hukommelsen. (oprettelse/initialisering)
         //Hvis denne ikke laves crasher programet med besked: NullPointerException. Andre ord: “Der findes ingen rigtig liste endnu”
         disciplines = new ArrayList<>();
+    }
+    public void addMeetResult(MeetResult meetResult) {
+        meetResults.add(meetResult);
+    }
+
+    public void addTrainingResult(TrainingResult trainingResult) {
+        trainingResults.add(trainingResult);
     }
 
     //Metoder
@@ -50,13 +61,14 @@ public class CompetitiveSwimmer {
     }
 
 
-    public ArrayList<Result> getResults() {
-        return results;
-    }
-    public void addResult(Result result) {
-        results.add(result);
+    public ArrayList<MeetResult> getResults() {
+        return meetResults;
     }
 
+    public ArrayList<TrainingResult> getTopFiveTrainingResults(){
+        Collections.sort(trainingResults, Comparator.comparingDouble(TrainingResult::getTime));
+        return new ArrayList<>(trainingResults.subList(0, Math.min(5, trainingResults.size())));
+    }
 
     // setter
     public void setMember(Member member) {
@@ -85,6 +97,8 @@ public class CompetitiveSwimmer {
 
     public void setResults(ArrayList<Result> results) {
         this.results = results;
+    public void setResults(ArrayList<MeetResult> meetResults) {
+        this.meetResults = meetResults;
     }
 
 
@@ -93,7 +107,7 @@ public class CompetitiveSwimmer {
         return "CompetitiveSwimmer{" +
                 "member=" + member +
                 ", trainer=" + trainer +
-                ", results=" + results +
+                ", results=" + meetResults +
                 ", disciplines=" + disciplines +
                 '}';
     }
