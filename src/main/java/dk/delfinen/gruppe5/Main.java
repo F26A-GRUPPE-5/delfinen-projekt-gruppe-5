@@ -10,6 +10,7 @@ import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
+import java.util.ArrayList;
 
 import java.util.Scanner;
 
@@ -48,11 +49,37 @@ public class Main {
 // Opretter en CompetitiveSwimmer
         CompetitiveSwimmer swimmer = new CompetitiveSwimmer(member, trainer);
 
+        ArrayList<CompetitiveSwimmer> swimmers = new ArrayList<>(); // Liste med swimmers
+        swimmers.add(swimmer); // Tilføjer swimmer til listen
+
         swimmer.addDiscipline(Discipline.Crawl);
         swimmer.addDiscipline(Discipline.Butterfly);
 
+        // Loop som viser alle swimmers
+        for (CompetitiveSwimmer s : swimmers) {
+
+            // Tjekker om svømmeren har discipliner
+            if (!s.getDisciplines().isEmpty()) {
+
+                System.out.println(
+                        s.getMember().getName()
+                                + " -> "
+                                + s.getTeam()
+                );
+
+            } else {
+
+                System.out.println(
+                        s.getMember().getName()
+                                + " har ingen discipliner"
+                );
+            }
+        }
+
         System.out.println(swimmer.getTeam());
         System.out.println(swimmer);
+
+
 
         Result result1 = new Result(
                 Discipline.Crawl,
@@ -61,9 +88,7 @@ public class Main {
                 "Delfin stævnet 2026", //Navn på stævnet
                 "12-05-2026"
         );
-
         swimmer.addResult(result1);
-
         System.out.println(swimmer);
 
 

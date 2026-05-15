@@ -84,9 +84,9 @@ public class CompetitiveSwimmer {
 
     public String getTeam() {
         if (member.getAge() <18) {
-            return "Du tilhøre junior holdet";
+            return "Du tilhøre Ungdomshold";
         }else {
-            return "Du tilhøre senior holdet";
+            return "Du tilhøre Seniorhold";
         }
     }
 }
