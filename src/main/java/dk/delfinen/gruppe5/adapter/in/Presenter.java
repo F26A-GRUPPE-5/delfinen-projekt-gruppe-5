@@ -4,7 +4,8 @@ package dk.delfinen.gruppe5.adapter.in;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.domain.model.CompetitiveSwimmer;
 import dk.delfinen.gruppe5.domain.model.Member;
-import dk.delfinen.gruppe5.domain.model.Result;
+import dk.delfinen.gruppe5.domain.model.MeetResult;
+import dk.delfinen.gruppe5.domain.model.TrainingResult;
 
 
 // TODO: her skal blandt andet formatering være, for eksempel hvis vi vil have farver eller skal vise noget i et table
@@ -21,9 +22,9 @@ public class Presenter {
             System.out.println(m);
         }
     }
-    public void printTopFiveResults(CompetitiveSwimmer swimmer) {
-        for (Result result : swimmer.getTopFiveResults()) {
-            System.out.println(result);
+    public void printTopFiveTrainingResults(CompetitiveSwimmer swimmer) {
+        for (TrainingResult trainingResult : swimmer.getTopFiveTrainingResults()) {
+            System.out.println(trainingResult);
 
         }
     }

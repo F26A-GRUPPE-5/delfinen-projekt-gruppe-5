@@ -5,13 +5,9 @@ import dk.delfinen.gruppe5.adapter.in.Controller;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
-import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
 import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
-import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
-
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -54,7 +50,7 @@ public class Main {
         System.out.println(swimmer.getTeam());
         System.out.println(swimmer);
 
-        Result result1 = new Result(
+        MeetResult meetResult1 = new MeetResult(
                 Discipline.Crawl,
                 55.3, //svømmetiden
                 1, //placering i konkurrencen
@@ -62,7 +58,7 @@ public class Main {
                 "12-05-2026"
         );
 
-        swimmer.addResult(result1);
+        swimmer.addMeetResult(meetResult1);
 
         System.out.println(swimmer);
 

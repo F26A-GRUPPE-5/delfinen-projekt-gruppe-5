@@ -11,14 +11,14 @@ public class CompetetiveSwimmerTest {
     void getTopFiveResults_returnsFiveFastest() {
         CompetitiveSwimmer swimmer = new CompetitiveSwimmer(null, null);
 
-        swimmer.addResult(new Result(63, "butterfly"));
-        swimmer.addResult(new Result(45, "crawl"));
-        swimmer.addResult(new Result(72, "rygcrawl"));
-        swimmer.addResult(new Result(50, "bryst"));
-        swimmer.addResult(new Result(40, "crawl"));
-        swimmer.addResult(new Result(55, "butterfly")); // denne skal ikke med
+        swimmer.addTrainingResult(new TrainingResult(63, "butterfly"));
+        swimmer.addTrainingResult(new TrainingResult(45, "crawl"));
+        swimmer.addTrainingResult(new TrainingResult(72, "rygcrawl"));
+        swimmer.addTrainingResult(new TrainingResult(50, "bryst"));
+        swimmer.addTrainingResult(new TrainingResult(40, "crawl"));
+        swimmer.addTrainingResult(new TrainingResult(55, "butterfly")); // denne skal ikke med
 
-        ArrayList<Result> top5 = swimmer.getTopFiveResults();
+        ArrayList<TrainingResult> top5 = swimmer.getTopFiveTrainingResults();
 
         assertEquals(5, top5.size());
         assertEquals(40, top5.get(0).getTime());
