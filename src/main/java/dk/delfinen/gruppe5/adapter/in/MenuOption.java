@@ -5,12 +5,21 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class MenuOption {
+    private final String label;
+    private final Runnable action;
+    private final boolean isExit;
 
-    private final actions;
-    private final Scanner scanner;
-
-    public Menu(Map<String, Runnable> actions, Scanner scanner) {
-        this.actions = actions;
-        this.scanner = scanner;
+    public MenuOption(String label, Runnable action) {
+        this(label, action, false);
     }
+
+    public MenuOption(String label, Runnable action, boolean isExit) {
+        this.label = label;
+        this.action = action;
+        this.isExit = isExit;
+    }
+
+    public String getLabel() { return label; }
+    public void run() { action.run(); }
+    public boolean isExit() { return isExit; }
 }

@@ -67,6 +67,18 @@ class InputParserTest {
     }
     @ParameterizedTest
     @CsvSource({
+            "''",
+            "måske",
+            "1",
+    })
+
+    void invalid_boolean_throws_exception(String input) {
+        InputParser parser = new InputParser(new Scanner(input + "\n"));
+        assertThrows(InvalidInputException.class, parser::parseBoolean);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
             "ja",
             "j",
             "nej",
@@ -77,18 +89,6 @@ class InputParserTest {
             "no",
             "true",
             "false",
-    })
-
-    void invalid_boolean_throws_exception(String input) {
-        InputParser parser = new InputParser(new Scanner(input + "\n"));
-        assertThrows(InvalidInputException.class, parser::parseBoolean);
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-            "''",
-            "måske",
-            "1",
     })
 
     void valid_boolean_does_not_throw(String input) throws InvalidInputException {
