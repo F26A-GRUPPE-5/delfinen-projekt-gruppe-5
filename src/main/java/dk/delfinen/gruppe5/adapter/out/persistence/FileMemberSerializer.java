@@ -15,7 +15,10 @@ public class FileMemberSerializer {
                 member.getBirthYear(),
                 member.getIsCompetitor(),
                 member.getActivity(),
-                "active",};
+                "active",
+                member.getTrainerName()
+        };
+
         StringBuilder csv = new StringBuilder();
 
         for (Object field: fields) {
@@ -28,7 +31,7 @@ public class FileMemberSerializer {
 
         String[] tokenized = csv.split(", ");
 
-        return new Member(
+        Member member = new Member(
                 Integer.parseInt(tokenized[0]),
                 tokenized[1],
                 Integer.parseInt(tokenized[2]),
@@ -36,5 +39,9 @@ public class FileMemberSerializer {
                 tokenized[4],
                 new ActiveMembership()
         );
+
+        member.setTrainerName(tokenized[6]);
+
+        return member;
     }
 }

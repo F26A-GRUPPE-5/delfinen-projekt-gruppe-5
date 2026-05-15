@@ -47,6 +47,16 @@ public class Main {
         Trainer trainer2 = new Trainer(""); // Tester tomt trænernavn
         Trainer newTrainer = new Trainer("Michael"); // Ny træner
 
+        member.setTrainerName(trainer.getName());
+        System.out.println(member.getTrainerName() + " er træneren");
+
+                memberRepository.save(member); // Gemmer member i CSV-fil
+                Member loadedMember = memberRepository.find(1); // Henter member fra filen igen
+                System.out.println(
+                    loadedMember.getTrainerName()
+                        + " blev hentet fra filen"
+        );
+
 
         // Opretter en CompetitiveSwimmer
         CompetitiveSwimmer swimmer = new CompetitiveSwimmer(member, trainer);
