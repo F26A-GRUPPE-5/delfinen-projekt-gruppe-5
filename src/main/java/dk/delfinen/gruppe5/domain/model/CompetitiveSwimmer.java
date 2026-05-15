@@ -79,6 +79,24 @@ public class CompetitiveSwimmer {
         this.trainer = trainer;
     }
 
+    // Metode som tildeler/ændrer træner
+    public static void addCoachToCompSwimmer(
+            CompetitiveSwimmer swimmer,
+            Trainer trainer
+    ) {
+
+        // Validering (Kun hvis træneren og navnet findes og navnet ikke er tomt)
+        if (trainer != null && //Findes der et trainer objekt
+                trainer.getName() != null &&
+                !trainer.getName().isEmpty()) {
+            swimmer.setTrainer(trainer);
+
+        } //ved denne undgår vi tomme navne, null errors og ugyldige træner
+    }
+
+
+    public void setResults(ArrayList<Result> results) {
+        this.results = results;
     public void setResults(ArrayList<MeetResult> meetResults) {
         this.meetResults = meetResults;
     }
