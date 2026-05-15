@@ -64,14 +64,12 @@ public class ControllerElementer {
     }
 
     public void appAddMember(Scanner scanner) {
-        scanner.nextLine();
 
         System.out.println("Indtast navnet på personen som skal tilføjes");
         System.out.println("Navnet:");
         String name = scanner.nextLine();
 
         System.out.println("Indtast fødselsåret på personen");
-        System.out.println("Fødselsåret:");
         int birthYear = inputHandler.getInt("Fødselsåret: ");
 
         System.out.println("Er medlemmet konkurrerende?");
