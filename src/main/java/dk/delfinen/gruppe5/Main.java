@@ -6,7 +6,7 @@ import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
-import dk.delfinen.gruppe5.domain.model.Member;
+import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
@@ -25,6 +25,49 @@ public class Main {
 
         Controller controller = new Controller();
         controller.start();
+
+        Membership active = new ActiveMembership();
+
+
+        // Opretter et Member objekt (senior)
+        Member member = new Member(
+                1,
+                "Magnus",
+                2008,
+                true,
+                "Konkurrencesvømmer",
+                active
+        );
+
+
+
+// Opretter en træner
+        Trainer trainer = new Trainer("Peter");
+
+
+// Opretter en CompetitiveSwimmer
+        CompetitiveSwimmer swimmer = new CompetitiveSwimmer(member, trainer);
+
+        swimmer.addDiscipline(Discipline.Crawl);
+        swimmer.addDiscipline(Discipline.Butterfly);
+
+        System.out.println(swimmer.getTeam());
+        System.out.println(swimmer);
+
+        Result result1 = new Result(
+                Discipline.Crawl,
+                55.3, //svømmetiden
+                1, //placering i konkurrencen
+                "Delfin stævnet 2026", //Navn på stævnet
+                "12-05-2026"
+        );
+
+        swimmer.addResult(result1);
+
+        System.out.println(swimmer);
+
+
+
 //
 //
 //        Scanner scanner = new Scanner(System.in);
