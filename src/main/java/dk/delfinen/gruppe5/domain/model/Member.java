@@ -14,6 +14,7 @@ public class Member {
     private String activity;
     private Membership membership;
     private boolean hasPaid;
+    private String trainerName;
 
 
     public Member(int id, String name, int birthYear, boolean isCompetitor, String activity, Membership membership) {
@@ -82,6 +83,14 @@ public class Member {
 
     public void setMembership(Membership membership) {
         this.membership = membership;
+    }
+
+    public String getTrainerName() {
+        return trainerName;
+    }
+
+    public void setTrainerName(String trainerName) {
+        this.trainerName = trainerName;
     }
 
     @Override
