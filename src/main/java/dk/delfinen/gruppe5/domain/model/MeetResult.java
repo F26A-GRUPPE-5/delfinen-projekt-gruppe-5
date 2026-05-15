@@ -1,6 +1,6 @@
 package dk.delfinen.gruppe5.domain.model;
 
-public class Result {
+public class MeetResult {
 
     // Hvilken disciplin resultatet tilhører
     private Discipline discipline;
@@ -19,11 +19,11 @@ public class Result {
 
 
     // Constructor
-    public Result(Discipline discipline,
-                  double time,
-                  int placement,
-                  String competition,
-                  String date) {
+    public MeetResult(Discipline discipline,
+                      double time,
+                      int placement,
+                      String competition,
+                      String date) {
 
         this.discipline = discipline;
         this.time = time;
