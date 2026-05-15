@@ -42,12 +42,21 @@ public class Main {
 
 
 
-// Opretter en træner
-        Trainer trainer = new Trainer("Peter");
+
+        Trainer trainer = new Trainer("Peter"); // Opretter en træner
+        Trainer trainer2 = new Trainer(""); // Tester tomt trænernavn
+        Trainer newTrainer = new Trainer("Michael"); // Ny træner
 
 
-// Opretter en CompetitiveSwimmer
+        // Opretter en CompetitiveSwimmer
         CompetitiveSwimmer swimmer = new CompetitiveSwimmer(member, trainer);
+
+        // Ændrer træneren
+        CompetitiveSwimmer.addCoachToCompSwimmer(
+                swimmer,
+                newTrainer
+        );
+        System.out.println(swimmer.getTrainer());
 
         ArrayList<CompetitiveSwimmer> swimmers = new ArrayList<>(); // Liste med swimmers
         swimmers.add(swimmer); // Tilføjer swimmer til listen
