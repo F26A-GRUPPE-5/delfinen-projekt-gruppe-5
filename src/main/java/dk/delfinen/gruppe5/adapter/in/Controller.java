@@ -3,7 +3,7 @@ package dk.delfinen.gruppe5.adapter.in;
 
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
-import dk.delfinen.gruppe5.adapter.out.persistence.InMemoryMemberRepository;
+import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
 import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
 import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
@@ -11,6 +11,10 @@ import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
 import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
 import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
+import dk.delfinen.gruppe5.domain.model.Member;
+import dk.delfinen.gruppe5.domain.service.ActiveMembership;
+import dk.delfinen.gruppe5.domain.service.Membership;
+import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 
 import java.util.Scanner;
 
@@ -23,122 +27,121 @@ public class Controller {
     RegisterMemberUseCase registerMember;
     SortMembersUseCase sortMembers;
     IdGenerator idGenerator;
-    ControllerElementer controllerElementer;
-    // MemberList members = new MemberList();
     InputHandler inputHandler;
+    DeleteMemberUseCase deleteMember;
 
 
     public Controller() {
-
         FileMemberSerializer serializer = new FileMemberSerializer();
-
         members = new FileMemberRepository(serializer, "Members.csv");
-        // MemberRepository repository = new FileMemberRepository(serializer, "Members.csv"); Ændret unødvendig
-
-        //members = new InMemoryMemberRepository();
         presenter = new Presenter(members);
         idGenerator = new RandomIdGenerator();
         sortMembers = new SortMembersUseCaseImpl();
         registerMember = new RegisterMemberUseCaseImpl(idGenerator, members);
-        controllerElementer = new ControllerElementer(idGenerator, members);
         inputHandler = new InputHandler(new Scanner(System.in));
     }
 
-
-
-
-
     public void start() {
+        inputHandler.chooseLooping("log ind som...", new MenuOption[]{
+                new MenuOption("klubformand (se medlemmer)", () -> {
+                    memberMenu();
+                }),
+                new MenuOption("kasserer", () -> {
+                    treasurerMenu();
+                }),
+//                        new MenuOption("træner", () -> {
+//                            trainerMenu();
+//                        }),
+        });
+    }
 
-        Scanner scanner = new Scanner(System.in);
-
-
-
-
-
-        boolean running = true;
-
-        while (running) {
-
-            controllerElementer.printMenu();
-
-            int inputMenuChoice = inputHandler.getInt("Indtast et tal:");
-
-            switch (inputMenuChoice) {
-
-                //Alt relateret til oprettelse af medlemmer
-                case 1:
-
-                    controllerElementer.printMenuMember();
-
-                    int inputMemberChoice = inputHandler.getInt("Indtast et tal: ");
-
-                    switch (inputMemberChoice) {
-
-                        //Tilføj medlem
-                        case 1:
-                            controllerElementer.appAddMember(scanner);
-                            break;
-
-                        //Slet medlem
-                        case 2:
-                            controllerElementer.deleteMember(scanner);
-                            break;
-
-                        //Liste over medlemmer
-                        case 3:
-
+    private void memberMenu() {
+        inputHandler.chooseLooping(
+                presenter.MemberList(),
+                new MenuOption[]{
+                        new MenuOption("tilføj medlem", () -> {
+                            addMember();
+                        }),
+                        new MenuOption("slet medlem", () -> {
+                            deleteMember();
+                        }),
+                        new MenuOption("rediger medlem", () -> {
+                            editMember();
+                        }),
+                        new MenuOption("sorter efter aktivitet", () -> {
                             sortMembers.sortByActivity(members.findAll());
-                            presenter.printMemberList();
-                            break;
+                        }),
+                }
+        );
+    }
 
-                        //Redigering af medlemmer
-                        case 4:
-                            controllerElementer.editMember(scanner);
-                            break;
+    public void addMember() {
 
-                        case 5:
-                            break;
+        String name = inputHandler.getString("Indtast navnet på personen som skal tilføjes");
+        int birthYear = inputHandler.getInt("Indtast fødselsåret på personen");
+        Boolean isCompetitor = inputHandler.getBoolean("Er medlemmet konkurrerende?");
+        String activity = inputHandler.getString("Hvilken aktivitet er han medlem af");
+        Membership membership = inputHandler.getBoolean("Er medlemmet aktivt?") ?
+                new ActiveMembership()
+                : new PassiveMembership();
+        registerMember.execute(name, birthYear, isCompetitor, activity, membership);
+        System.out.println("Memberen er blevet oprettet");
+    }
 
-                    }
-                    break;
+    public void deleteMember() {
+        System.out.println(presenter.MemberList());
+        deleteMember.execute(inputHandler.getInt("Indtast id nummer på det medlem du vil slette:"));
+    }
 
-                // Alt relateret til kontingent
-                case 2:
+    public void editMember() {
+        int id = inputHandler.getInt("Indtast id'et på det medlem du vil redigere: ");
 
-                    controllerElementer.printMenuKontingent();
-
-                    int inputSubscriptionChoice = inputHandler.getInt("Indtast et tal: ");
-                    switch (inputSubscriptionChoice) {
-                    }
-
-                    switch (inputSubscriptionChoice) {
-
-                        // liste over status af betalte kontingenter
-                        case 1:
-                            presenter.printSubscriptionPaidList();
-                            break;
-
-                        // Marker members som har betalt
-                        case 2:
-                            controllerElementer.markMemberAsPaid(scanner);
-                            break;
-
-                        case 3:
-                            break;
-
-                    }
-                    break;
-
-                case 3:
-                    members.saveAll(members.findAll());
-                    running = false;
-
-
-            }
-
+        if (!members.exists(id)) {
+            System.out.println("Intet medlem kunne finde med det id");
+            return;
         }
+        Member memberToEdit = members.find(id);
 
+        inputHandler.chooseLooping(
+                "Indtast nr på handling:",
+                new MenuOption[]{
+                        new MenuOption("Skift navn", () -> {
+                            memberToEdit.setName(inputHandler.getString("Skriv navn"));
+                        }),
+                        new MenuOption("Skift fødselsår", () -> {
+                            memberToEdit.setBirthYear(inputHandler.getInt("Nyt fødselsår: "));
+                        }),
+                        new MenuOption("Skift konkurrerende status", () -> {
+                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlem konkurrerende? (ja/nej)"));
+                        }),
+                        new MenuOption("Skift aktivitet", () -> {
+                            memberToEdit.setBirthYear(inputHandler.getInt("Nyt fødselsår: "));
+                        }),
+                        new MenuOption("Skift medlemskab", () -> {
+                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlem konkurrerende? (ja/nej):"));
+                        }),
+                }
+        );
+    }
+
+    public void treasurerMenu() {
+        inputHandler.chooseLooping(
+                presenter.SubscriptionPaidList(),
+                new MenuOption[]{
+                        new MenuOption("marker medlem som betalt", () -> {
+                            markMemberAsPaid();
+                        }),
+                });
+    }
+
+    public void markMemberAsPaid() {
+        Member member = members.find(inputHandler.getInt("Indtast ID på medlem der har betalt: "));
+        if (member != null) {
+            member.setHasPaid(true);
+            System.out.println("Medlem markeret som betalt: " + member.getName());
+        } else {
+            System.out.println("Intet medlem fundet med det ID.");
+        }
     }
 }
 

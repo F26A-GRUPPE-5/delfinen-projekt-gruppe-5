@@ -17,10 +17,12 @@ public class Presenter {
         this.members = members;
     }
 
-    public void printMemberList() {
+    public String MemberList() {
+        String string = "";
         for(Member m : members.findAll()) {
-            System.out.println(m);
+            string += m;
         }
+        return string;
     }
     public void printTopFiveTrainingResults(CompetitiveSwimmer swimmer) {
         for (TrainingResult trainingResult : swimmer.getTopFiveTrainingResults()) {
@@ -29,7 +31,8 @@ public class Presenter {
         }
     }
 
-    public void printSubscriptionPaidList() {
+    public String SubscriptionPaidList() {
+        String subscribers = "";
         for (Member m : members.findAll()) {
 
             String status;
@@ -40,7 +43,7 @@ public class Presenter {
                 status = "Unpaid";
             }
 
-            System.out.println("""
+            subscribers += ("""
                     medlemsId: %s
                     navn: %s
                     kontigent: %s
@@ -53,15 +56,16 @@ public class Presenter {
 
             ));
         }
+        return subscribers;
     }
 
-    public void printSubscriptionUnpaidList() {
-        for(Member m : members.findAll()) {
-            System.out.println(m);
+    public String SubscriptionUnpaidList() {
+        String string = "";
+        for (Member m : members.findAll()) {
+            string += m;
         }
+        return string;
     }
-
-
 }
 
 
