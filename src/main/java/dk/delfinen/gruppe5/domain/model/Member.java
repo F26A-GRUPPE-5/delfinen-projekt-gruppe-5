@@ -27,6 +27,9 @@ public class Member {
         this.hasPaid = false;
     }
 
+    public Membership getMembership() {
+        return membership;
+    }
 
     public int getId() {
         return id;

@@ -20,7 +20,7 @@ public class Main {
                 );
         //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
 
-        Controller controller = new Controller();
+        Controller controller = new Controller(memberRepository);
         controller.start();
 
         Membership active = new ActiveMembership();
@@ -96,19 +96,19 @@ public class Main {
 
 
 
-        Result result1 = new Result(
-        MeetResult meetResult1 = new MeetResult(
-                Discipline.Crawl,
-                55.3, //svømmetiden
-                1, //placering i konkurrencen
-                "Delfin stævnet 2026", //Navn på stævnet
-                "12-05-2026"
-        );
-        swimmer.addResult(result1);
-
-        swimmer.addMeetResult(meetResult1);
-
-        System.out.println(swimmer);
+//        Result result1 = new Result(
+//        MeetResult meetResult1 = new MeetResult(
+//                Discipline.Crawl,
+//                55.3, //svømmetiden
+//                1, //placering i konkurrencen
+//                "Delfin stævnet 2026", //Navn på stævnet
+//                "12-05-2026"
+//        );
+//        swimmer.addResult(result1);
+//
+//        swimmer.addMeetResult(meetResult1);
+//
+//        System.out.println(swimmer);
 
 
 

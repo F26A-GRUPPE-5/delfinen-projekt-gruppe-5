@@ -31,9 +31,8 @@ public class Controller {
     DeleteMemberUseCase deleteMember;
 
 
-    public Controller() {
-        FileMemberSerializer serializer = new FileMemberSerializer();
-        members = new FileMemberRepository(serializer, "Members.csv");
+    public Controller(MemberRepository members) {
+        this.members = members;
         presenter = new Presenter(members);
         idGenerator = new RandomIdGenerator();
         sortMembers = new SortMembersUseCaseImpl();
@@ -49,9 +48,9 @@ public class Controller {
                 new MenuOption("kasserer", () -> {
                     treasurerMenu();
                 }),
-//                        new MenuOption("træner", () -> {
-//                            trainerMenu();
-//                        }),
+                new MenuOption("træner", () -> {
+                    trainerMenu();
+                }),
         });
     }
 
@@ -112,13 +111,15 @@ public class Controller {
                             memberToEdit.setBirthYear(inputHandler.getInt("Nyt fødselsår: "));
                         }),
                         new MenuOption("Skift konkurrerende status", () -> {
-                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlem konkurrerende? (ja/nej)"));
+                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlemmet konkurrerende? (ja/nej)"));
                         }),
                         new MenuOption("Skift aktivitet", () -> {
-                            memberToEdit.setBirthYear(inputHandler.getInt("Nyt fødselsår: "));
+                            memberToEdit.setActivity(inputHandler.getString("Skriv aktivitet"));
                         }),
                         new MenuOption("Skift medlemskab", () -> {
-                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlem konkurrerende? (ja/nej):"));
+                            memberToEdit.setMembership(inputHandler.getBoolean("Er medlemmet aktivt?")
+                                    ? new ActiveMembership()
+                                    : new PassiveMembership());
                         }),
                 }
         );
@@ -131,6 +132,13 @@ public class Controller {
                         new MenuOption("marker medlem som betalt", () -> {
                             markMemberAsPaid();
                         }),
+                        new MenuOption("se forventet årlig ", () -> {
+                            markMemberAsPaid();
+                        }),
+                        new MenuOption("marker medlem som betalt", () -> {
+                            markMemberAsPaid();
+                        }),
+
                 });
     }
 
@@ -142,6 +150,33 @@ public class Controller {
         } else {
             System.out.println("Intet medlem fundet med det ID.");
         }
+    }
+    public void trainerMenu() {
+        inputHandler.chooseLooping(
+                "Træner Menu",  // eventuelt en liste over mine svømmere
+//                new MenuOption[]{
+//                        new MenuOption("overtag svømmere", () -> {
+//                              ...
+//                            AssignTrainerToCompetitiveSwimmer();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("registrer træningsresultat", () -> {
+//                            ...();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("registrer stævneresultat", () -> {
+//                            ...();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("opdater svømmediscipliner", () -> {
+//                            ...();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("se statistik", () -> {
+//                            ...();
+//                        }),
+//                });
+
     }
 }
 
