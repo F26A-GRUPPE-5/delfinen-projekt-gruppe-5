@@ -31,14 +31,20 @@ public class Controller {
     DeleteMemberUseCase deleteMember;
 
 
-    public Controller() {
-        FileMemberSerializer serializer = new FileMemberSerializer();
-        members = new FileMemberRepository(serializer, "Members.csv");
-        presenter = new Presenter(members);
-        idGenerator = new RandomIdGenerator();
-        sortMembers = new SortMembersUseCaseImpl();
-        registerMember = new RegisterMemberUseCaseImpl(idGenerator, members);
-        inputHandler = new InputHandler(new Scanner(System.in));
+    public Controller(
+            MemberRepository members,
+            RegisterMemberUseCase registerMember,
+            SortMembersUseCase sortMembers,
+            DeleteMemberUseCase deleteMember,
+            IdGenerator idGenerator
+    ) {
+        this.members = members;
+        this.presenter = new Presenter(members);
+        this.registerMember = registerMember;
+        this.sortMembers = sortMembers;
+        this.deleteMember = deleteMember;
+        this.idGenerator = idGenerator;
+        this.inputHandler = new InputHandler(new Scanner(System.in));
     }
 
     public void start() {
@@ -49,9 +55,9 @@ public class Controller {
                 new MenuOption("kasserer", () -> {
                     treasurerMenu();
                 }),
-//                        new MenuOption("træner", () -> {
-//                            trainerMenu();
-//                        }),
+                new MenuOption("træner", () -> {
+                    trainerMenu();
+                }),
         });
     }
 
@@ -81,11 +87,9 @@ public class Controller {
         int birthYear = inputHandler.getInt("Indtast fødselsåret på personen");
         Boolean isCompetitor = inputHandler.getBoolean("Er medlemmet konkurrerende?");
         String activity = inputHandler.getString("Hvilken aktivitet er han medlem af");
-        Membership membership = inputHandler.getBoolean("Er medlemmet aktivt?") ?
-                new ActiveMembership()
-                : new PassiveMembership();
-        registerMember.execute(name, birthYear, isCompetitor, activity, membership);
-        System.out.println("Memberen er blevet oprettet");
+        Boolean isActive = inputHandler.getBoolean("Er medlemmet aktivt?");
+        registerMember.execute(name, birthYear, isCompetitor, activity, isActive);
+        System.out.println("Medlemmet er blevet oprettet");
     }
 
     public void deleteMember() {
@@ -112,13 +116,15 @@ public class Controller {
                             memberToEdit.setBirthYear(inputHandler.getInt("Nyt fødselsår: "));
                         }),
                         new MenuOption("Skift konkurrerende status", () -> {
-                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlem konkurrerende? (ja/nej)"));
+                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlemmet konkurrerende? (ja/nej)"));
                         }),
                         new MenuOption("Skift aktivitet", () -> {
-                            memberToEdit.setBirthYear(inputHandler.getInt("Nyt fødselsår: "));
+                            memberToEdit.setActivity(inputHandler.getString("Skriv aktivitet"));
                         }),
                         new MenuOption("Skift medlemskab", () -> {
-                            memberToEdit.setIsCompetitor(inputHandler.getBoolean("Er medlem konkurrerende? (ja/nej):"));
+                            memberToEdit.setMembership(inputHandler.getBoolean("Er medlemmet aktivt?")
+                                    ? new ActiveMembership()
+                                    : new PassiveMembership());
                         }),
                 }
         );
@@ -131,6 +137,13 @@ public class Controller {
                         new MenuOption("marker medlem som betalt", () -> {
                             markMemberAsPaid();
                         }),
+                        new MenuOption("se forventet årlig ", () -> {
+                            markMemberAsPaid();
+                        }),
+                        new MenuOption("marker medlem som betalt", () -> {
+                            markMemberAsPaid();
+                        }),
+
                 });
     }
 
@@ -142,6 +155,33 @@ public class Controller {
         } else {
             System.out.println("Intet medlem fundet med det ID.");
         }
+    }
+    public void trainerMenu() {
+//        inputHandler.chooseLooping(
+//                "Træner Menu",  // eventuelt en liste over mine svømmere
+//                new MenuOption[]{
+//                        new MenuOption("overtag svømmere", () -> {
+//                              ...
+//                            AssignTrainerToCompetitiveSwimmer();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("registrer træningsresultat", () -> {
+//                            ...();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("registrer stævneresultat", () -> {
+//                            ...();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("opdater svømmediscipliner", () -> {
+//                            ...();
+//                        }),
+//                new MenuOption[]{
+//                        new MenuOption("se statistik", () -> {
+//                            ...();
+//                        }),
+//                });
+
     }
 }
 

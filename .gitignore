@@ -1,4 +1,11 @@
+### Maven ###
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 ### IntelliJ IDEA ###
+.idea/
+*.iml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
@@ -28,3 +35,13 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Logs / temp files ###
+*.log
+*.tmp
+
+### Java ###
+*.class
+
+### ArchUnit / test artifacts (optional safety) ###
+.archunit-cache/

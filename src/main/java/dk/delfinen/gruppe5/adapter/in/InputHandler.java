@@ -58,7 +58,7 @@ public class InputHandler {
             try {
                 int index = parser.parseIntFromZeroUpToMax(choices.length - 1);
                 choices[index].run();
-                return choices[index].isExit(); // ⭐ key line
+                return choices[index].isExit();
             } catch (InvalidInputException e) {
                 System.out.println(e.getMessage() + "Prøv igen.");
             }

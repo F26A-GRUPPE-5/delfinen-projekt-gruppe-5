@@ -45,7 +45,7 @@ class MemberCRUDAcceptanceTest {
         int id = 1;
 
         registerMember = new RegisterMemberUseCaseImpl(new FakeIdGenerator(1), repo);
-        registerMember.execute("Jens", 1992, true, "sleepwalker", new ActiveMembership());
+        registerMember.execute("Jens", 1992, true, "sleepwalker", true);
 
         assertTrue(repo.exists(id));
     }

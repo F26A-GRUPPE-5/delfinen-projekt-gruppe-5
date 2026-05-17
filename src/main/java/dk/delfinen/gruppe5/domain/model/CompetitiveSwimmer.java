@@ -95,9 +95,10 @@ public class CompetitiveSwimmer {
     }
 
 
-    public void setResults(ArrayList<Result> results) {
-        this.results = results;
-    public void setResults(ArrayList<MeetResult> meetResults) {
+    public void setTrainingResults(ArrayList<TrainingResult> results) {
+        this.trainingResults = results;
+    }
+    public void setMeetResults(ArrayList<MeetResult> meetResults) {
         this.meetResults = meetResults;
     }
 

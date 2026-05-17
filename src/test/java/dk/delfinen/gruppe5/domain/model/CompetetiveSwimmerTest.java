@@ -3,7 +3,7 @@ package dk.delfinen.gruppe5.domain.model;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompetetiveSwimmerTest {
 

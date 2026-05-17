@@ -4,23 +4,41 @@ package dk.delfinen.gruppe5;
 import dk.delfinen.gruppe5.adapter.in.Controller;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
+import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
+import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
+import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
+import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
+import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
+import dk.delfinen.gruppe5.application.usecase.DeleteMemberUseCaseImpl;
+import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
+import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
 import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
+
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
 
-        MemberRepository memberRepository =
-                new FileMemberRepository(
-                        new FileMemberSerializer(),
-                        "src/main/java/data/Members.csv"
-                );
+        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
+                "src/main/java/data/Members.csv"
+        );
+
+        IdGenerator idGen = new RandomIdGenerator();
+
+        RegisterMemberUseCase register = new RegisterMemberUseCaseImpl(idGen, memberRepository);
+
+        SortMembersUseCase sort = new SortMembersUseCaseImpl();
+
+        DeleteMemberUseCase delete = new DeleteMemberUseCaseImpl(memberRepository);
+
+        Controller controller = new Controller(memberRepository, register, sort, delete, idGen);
+
         //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
 
-        Controller controller = new Controller();
+
         controller.start();
 
         Membership active = new ActiveMembership();
@@ -37,8 +55,6 @@ public class Main {
         );
 
 
-
-
         Trainer trainer = new Trainer("Peter"); // Opretter en træner
         Trainer trainer2 = new Trainer(""); // Tester tomt trænernavn
         Trainer newTrainer = new Trainer("Michael"); // Ny træner
@@ -46,10 +62,10 @@ public class Main {
         member.setTrainerName(trainer.getName());
         System.out.println(member.getTrainerName() + " er træneren");
 
-                memberRepository.save(member); // Gemmer member i CSV-fil
-                Member loadedMember = memberRepository.find(1); // Henter member fra filen igen
-                System.out.println(
-                    loadedMember.getTrainerName()
+        memberRepository.save(member); // Gemmer member i CSV-fil
+        Member loadedMember = memberRepository.find(1); // Henter member fra filen igen
+        System.out.println(
+                loadedMember.getTrainerName()
                         + " blev hentet fra filen"
         );
 
@@ -95,21 +111,19 @@ public class Main {
         System.out.println(swimmer);
 
 
-
-        Result result1 = new Result(
-        MeetResult meetResult1 = new MeetResult(
-                Discipline.Crawl,
-                55.3, //svømmetiden
-                1, //placering i konkurrencen
-                "Delfin stævnet 2026", //Navn på stævnet
-                "12-05-2026"
-        );
-        swimmer.addResult(result1);
-
-        swimmer.addMeetResult(meetResult1);
-
-        System.out.println(swimmer);
-
+//        Result result1 = new Result(
+//        MeetResult meetResult1 = new MeetResult(
+//                Discipline.Crawl,
+//                55.3, //svømmetiden
+//                1, //placering i konkurrencen
+//                "Delfin stævnet 2026", //Navn på stævnet
+//                "12-05-2026"
+//        );
+//        swimmer.addResult(result1);
+//
+//        swimmer.addMeetResult(meetResult1);
+//
+//        System.out.println(swimmer);
 
 
 //
