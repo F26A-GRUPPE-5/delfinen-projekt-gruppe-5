@@ -31,13 +31,20 @@ public class Controller {
     DeleteMemberUseCase deleteMember;
 
 
-    public Controller(MemberRepository members) {
+    public Controller(
+            MemberRepository members,
+            RegisterMemberUseCase registerMember,
+            SortMembersUseCase sortMembers,
+            DeleteMemberUseCase deleteMember,
+            IdGenerator idGenerator
+    ) {
         this.members = members;
-        presenter = new Presenter(members);
-        idGenerator = new RandomIdGenerator();
-        sortMembers = new SortMembersUseCaseImpl();
-        registerMember = new RegisterMemberUseCaseImpl(idGenerator, members);
-        inputHandler = new InputHandler(new Scanner(System.in));
+        this.presenter = new Presenter(members);
+        this.registerMember = registerMember;
+        this.sortMembers = sortMembers;
+        this.deleteMember = deleteMember;
+        this.idGenerator = idGenerator;
+        this.inputHandler = new InputHandler(new Scanner(System.in));
     }
 
     public void start() {
@@ -80,11 +87,9 @@ public class Controller {
         int birthYear = inputHandler.getInt("Indtast fødselsåret på personen");
         Boolean isCompetitor = inputHandler.getBoolean("Er medlemmet konkurrerende?");
         String activity = inputHandler.getString("Hvilken aktivitet er han medlem af");
-        Membership membership = inputHandler.getBoolean("Er medlemmet aktivt?") ?
-                new ActiveMembership()
-                : new PassiveMembership();
-        registerMember.execute(name, birthYear, isCompetitor, activity, membership);
-        System.out.println("Memberen er blevet oprettet");
+        Boolean isActive = inputHandler.getBoolean("Er medlemmet aktivt?");
+        registerMember.execute(name, birthYear, isCompetitor, activity, isActive);
+        System.out.println("Medlemmet er blevet oprettet");
     }
 
     public void deleteMember() {
@@ -152,8 +157,8 @@ public class Controller {
         }
     }
     public void trainerMenu() {
-        inputHandler.chooseLooping(
-                "Træner Menu",  // eventuelt en liste over mine svømmere
+//        inputHandler.chooseLooping(
+//                "Træner Menu",  // eventuelt en liste over mine svømmere
 //                new MenuOption[]{
 //                        new MenuOption("overtag svømmere", () -> {
 //                              ...
