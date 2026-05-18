@@ -3,9 +3,7 @@ package dk.delfinen.gruppe5.adapter.in;
 
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
-import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
+import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
@@ -16,6 +14,7 @@ import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 //TODO: Denne skal nok deles op i 2:
@@ -29,22 +28,34 @@ public class Controller {
     IdGenerator idGenerator;
     InputHandler inputHandler;
     DeleteMemberUseCase deleteMember;
+    EditMemberUseCase editMember;
+    FindMemberUseCase findMember;
+    ListMembersUseCase listMembers;
+    MarkMembershipPaymentUseCase markMembership;
 
 
     public Controller(
             MemberRepository members,
             RegisterMemberUseCase registerMember,
+            EditMemberUseCase editMember,
+            FindMemberUseCase findMember,
             SortMembersUseCase sortMembers,
             DeleteMemberUseCase deleteMember,
+            ListMembersUseCase listMembers,
+            MarkMembershipPaymentUseCase markMembership,
             IdGenerator idGenerator
     ) {
         this.members = members;
-        this.presenter = new Presenter(members);
+        this.presenter = new Presenter(members, listMembers);
         this.registerMember = registerMember;
+        this.editMember = editMember;
+        this.findMember = findMember;
         this.sortMembers = sortMembers;
         this.deleteMember = deleteMember;
         this.idGenerator = idGenerator;
+        this.listMembers = listMembers;
         this.inputHandler = new InputHandler(new Scanner(System.in));
+        this.markMembership = markMembership;
     }
 
     public void start() {
@@ -98,16 +109,13 @@ public class Controller {
     }
 
     public void editMember() {
-        int id = inputHandler.getInt("Indtast id'et på det medlem du vil redigere: ");
 
-        if (!members.exists(id)) {
-            System.out.println("Intet medlem kunne finde med det id");
-            return;
-        }
-        Member memberToEdit = members.find(id);
+        Member memberToEdit = findMember.execute(
+                inputHandler.getInt("Indtast id'et på det medlem du vil redigere: "))
+                .orElse(null);
 
         inputHandler.chooseLooping(
-                "Indtast nr på handling:",
+                "Hvad vil du ændre?:",
                 new MenuOption[]{
                         new MenuOption("Skift navn", () -> {
                             memberToEdit.setName(inputHandler.getString("Skriv navn"));
@@ -135,27 +143,23 @@ public class Controller {
                 presenter.SubscriptionPaidList(),
                 new MenuOption[]{
                         new MenuOption("marker medlem som betalt", () -> {
-                            markMemberAsPaid();
+                            boolean success = markMembership.execute(inputHandler.getInt(
+                                    "skriv id på det medlem du vil markere som betalt"));
+                            if (success) {
+                                System.out.println("medlem betalt");
+                            } else {
+                                System.out.println("fejl, medlem kunne ikke findes");
+                            }
                         }),
                         new MenuOption("se forventet årlig ", () -> {
-                            markMemberAsPaid();
+
                         }),
                         new MenuOption("marker medlem som betalt", () -> {
-                            markMemberAsPaid();
-                        }),
 
+                        }),
                 });
     }
 
-    public void markMemberAsPaid() {
-        Member member = members.find(inputHandler.getInt("Indtast ID på medlem der har betalt: "));
-        if (member != null) {
-            member.setHasPaid(true);
-            System.out.println("Medlem markeret som betalt: " + member.getName());
-        } else {
-            System.out.println("Intet medlem fundet med det ID.");
-        }
-    }
     public void trainerMenu() {
 //        inputHandler.chooseLooping(
 //                "Træner Menu",  // eventuelt en liste over mine svømmere

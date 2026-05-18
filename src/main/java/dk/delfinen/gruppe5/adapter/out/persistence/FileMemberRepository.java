@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 //TODO: her gemmes member til en fil
 public class FileMemberRepository implements MemberRepository {
@@ -24,20 +25,14 @@ public class FileMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member find(int id) {
-        try {
-            for (String line: lines) {
-                Member member = memberSerializer.toMember(line);
-                if (member.getId() == id) {
-                    return member;
-                }
+    public Optional<Member> find(int id) {
+        for (String line : lines) {
+            Member member = memberSerializer.toMember(line);
+            if (member.getId() == id) {
+                return Optional.of(member);
             }
-        } catch (Exception e) {
-            System.out.println("Member blev ikke fundet.");
-            e.printStackTrace();
         }
-        System.out.println("Member blev ikke fundet.");
-        return null;
+        return Optional.empty();
     }
 
 
@@ -92,6 +87,7 @@ public class FileMemberRepository implements MemberRepository {
         }
         return membersList;
     }
+
     public void clearAll() {
         lines = new ArrayList<>();
         writeFile();
@@ -116,6 +112,7 @@ public class FileMemberRepository implements MemberRepository {
         }
         lines = result;
     }
+
     private void writeFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String line : lines) {
