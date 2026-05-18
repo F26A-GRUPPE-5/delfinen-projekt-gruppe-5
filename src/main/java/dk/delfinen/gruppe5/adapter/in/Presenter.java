@@ -1,11 +1,18 @@
 package dk.delfinen.gruppe5.adapter.in;
 
 
+import dk.delfinen.gruppe5.application.dto.MemberDTO;
+import dk.delfinen.gruppe5.application.port.in.FindMemberUseCase;
+import dk.delfinen.gruppe5.application.port.in.ListMembersUseCase;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.domain.model.CompetitiveSwimmer;
 import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.model.MeetResult;
 import dk.delfinen.gruppe5.domain.model.TrainingResult;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SequencedCollection;
 
 
 // TODO: her skal blandt andet formatering være, for eksempel hvis vi vil have farver eller skal vise noget i et table
@@ -13,17 +20,25 @@ import dk.delfinen.gruppe5.domain.model.TrainingResult;
 public class Presenter {
     MemberRepository members;
 
-    public Presenter(MemberRepository members) {
+    ListMembersUseCase listMembers;
+    
+    public Presenter(MemberRepository members, ListMembersUseCase listMembers) {
         this.members = members;
+        this.listMembers = listMembers;
     }
 
     public String MemberList() {
         String string = "";
-        for(Member m : members.findAll()) {
-            string += m;
+        List<MemberDTO> list = listMembers.execute();
+        for (MemberDTO memberDTO : list) {
+            string += memberDTO;
         }
         return string;
     }
+
+    
+
+
     public void printTopFiveTrainingResults(CompetitiveSwimmer swimmer) {
         for (TrainingResult trainingResult : swimmer.getTopFiveTrainingResults()) {
             System.out.println(trainingResult);

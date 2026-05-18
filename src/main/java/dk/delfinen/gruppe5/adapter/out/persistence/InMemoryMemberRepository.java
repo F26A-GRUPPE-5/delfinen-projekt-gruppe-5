@@ -11,13 +11,17 @@ public class InMemoryMemberRepository implements MemberRepository{
     private HashMap<Integer, Member> members;
 
     public InMemoryMemberRepository() {
+        System.out.println("For debugging: created repo");
         this.members = new HashMap<>();
         idGenerator = new RandomIdGenerator();
     }
 
     @Override
-    public Member find(int id) {
-        return members.get(id);
+    public Optional<Member> find(int id) {
+        if (members.containsKey(id)) {
+            return Optional.of(members.get(id));
+        }
+        return Optional.empty();
     }
 
     @Override

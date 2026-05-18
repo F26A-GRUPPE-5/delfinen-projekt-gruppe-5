@@ -4,15 +4,12 @@ package dk.delfinen.gruppe5;
 import dk.delfinen.gruppe5.adapter.in.Controller;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
-import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
+import dk.delfinen.gruppe5.adapter.out.persistence.InMemoryMemberRepository;
+import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
-import dk.delfinen.gruppe5.application.usecase.DeleteMemberUseCaseImpl;
-import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
-import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
+import dk.delfinen.gruppe5.application.usecase.*;
 import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
@@ -22,94 +19,102 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
 
-        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
-                "src/main/java/data/Members.csv"
-        );
+//        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
+//                "src/main/java/data/Members.csv"
+//        );
+        MemberRepository memberRepository = new InMemoryMemberRepository();
 
         IdGenerator idGen = new RandomIdGenerator();
 
         RegisterMemberUseCase register = new RegisterMemberUseCaseImpl(idGen, memberRepository);
 
+        EditMemberUseCase edit = new EditMemberUseCaseImpl(memberRepository);
+
+        FindMemberUseCase find = new FindMemberUseCaseImpl(memberRepository);
+
         SortMembersUseCase sort = new SortMembersUseCaseImpl();
 
         DeleteMemberUseCase delete = new DeleteMemberUseCaseImpl(memberRepository);
 
-        Controller controller = new Controller(memberRepository, register, sort, delete, idGen);
+        ListMembersUseCase listMembers = new ListMembersUseCaseImpl(memberRepository);
+
+        MarkMembershipPaymentUseCase markMembership = new MarkMembershipPaymentUseCaseImpl(memberRepository);
+
+        Controller controller = new Controller(memberRepository, register, edit, find, sort, delete, listMembers, markMembership, idGen);
 
         //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
 
-
         controller.start();
-
-        Membership active = new ActiveMembership();
-
-
-        // Opretter et Member objekt (senior)
-        Member member = new Member(
-                1,
-                "Magnus",
-                2008,
-                true,
-                "Konkurrencesvømmer",
-                active
-        );
-
-
-        Trainer trainer = new Trainer("Peter"); // Opretter en træner
-        Trainer trainer2 = new Trainer(""); // Tester tomt trænernavn
-        Trainer newTrainer = new Trainer("Michael"); // Ny træner
-
-        member.setTrainerName(trainer.getName());
-        System.out.println(member.getTrainerName() + " er træneren");
-
-        memberRepository.save(member); // Gemmer member i CSV-fil
-        Member loadedMember = memberRepository.find(1); // Henter member fra filen igen
-        System.out.println(
-                loadedMember.getTrainerName()
-                        + " blev hentet fra filen"
-        );
-
-
-        // Opretter en CompetitiveSwimmer
-        CompetitiveSwimmer swimmer = new CompetitiveSwimmer(member, trainer);
-
-        // Ændrer træneren
-        CompetitiveSwimmer.addCoachToCompSwimmer(
-                swimmer,
-                newTrainer
-        );
-        System.out.println(swimmer.getTrainer());
-
-        ArrayList<CompetitiveSwimmer> swimmers = new ArrayList<>(); // Liste med swimmers
-        swimmers.add(swimmer); // Tilføjer swimmer til listen
-
-        swimmer.addDiscipline(Discipline.Crawl);
-        swimmer.addDiscipline(Discipline.Butterfly);
-
-        // Loop som viser alle swimmers
-        for (CompetitiveSwimmer s : swimmers) {
-
-            // Tjekker om svømmeren har discipliner
-            if (!s.getDisciplines().isEmpty()) {
-
-                System.out.println(
-                        s.getMember().getName()
-                                + " -> "
-                                + s.getTeam()
-                );
-
-            } else {
-
-                System.out.println(
-                        s.getMember().getName()
-                                + " har ingen discipliner"
-                );
-            }
-        }
-
-        System.out.println(swimmer.getTeam());
-        System.out.println(swimmer);
-
+//
+//        Membership active = new ActiveMembership();
+//
+//
+//        // Opretter et Member objekt (senior)
+//        Member member = new Member(
+//                1,
+//                "Magnus",
+//                2008,
+//                true,
+//                "Konkurrencesvømmer",
+//                active
+//        );
+//
+//
+//        Trainer trainer = new Trainer("Peter"); // Opretter en træner
+//        Trainer trainer2 = new Trainer(""); // Tester tomt trænernavn
+//        Trainer newTrainer = new Trainer("Michael"); // Ny træner
+//
+//        member.setTrainerName(trainer.getName());
+//        System.out.println(member.getTrainerName() + " er træneren");
+//
+//        memberRepository.save(member); // Gemmer member i CSV-fil
+//        Member loadedMember = memberRepository.find(1); // Henter member fra filen igen
+//        System.out.println(
+//                loadedMember.getTrainerName()
+//                        + " blev hentet fra filen"
+//        );
+//
+//
+//        // Opretter en CompetitiveSwimmer
+//        CompetitiveSwimmer swimmer = new CompetitiveSwimmer(member, trainer);
+//
+//        // Ændrer træneren
+//        CompetitiveSwimmer.addCoachToCompSwimmer(
+//                swimmer,
+//                newTrainer
+//        );
+//        System.out.println(swimmer.getTrainer());
+//
+//        ArrayList<CompetitiveSwimmer> swimmers = new ArrayList<>(); // Liste med swimmers
+//        swimmers.add(swimmer); // Tilføjer swimmer til listen
+//
+//        swimmer.addDiscipline(Discipline.Crawl);
+//        swimmer.addDiscipline(Discipline.Butterfly);
+//
+//        // Loop som viser alle swimmers
+//        for (CompetitiveSwimmer s : swimmers) {
+//
+//            // Tjekker om svømmeren har discipliner
+//            if (!s.getDisciplines().isEmpty()) {
+//
+//                System.out.println(
+//                        s.getMember().getName()
+//                                + " -> "
+//                                + s.getTeam()
+//                );
+//
+//            } else {
+//
+//                System.out.println(
+//                        s.getMember().getName()
+//                                + " har ingen discipliner"
+//                );
+//            }
+//        }
+//
+//        System.out.println(swimmer.getTeam());
+//        System.out.println(swimmer);
+//
 
 //        Result result1 = new Result(
 //        MeetResult meetResult1 = new MeetResult(
