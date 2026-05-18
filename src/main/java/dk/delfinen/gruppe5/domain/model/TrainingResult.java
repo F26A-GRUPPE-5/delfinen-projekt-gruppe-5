@@ -2,15 +2,15 @@ package dk.delfinen.gruppe5.domain.model;
 
 
 public class TrainingResult {
-    private int time;
+    private double time;
     private String discipline;
 
-    public TrainingResult(int time, String discipline) {
+    public TrainingResult(double time, String discipline) {
         this.time = time;
         this.discipline = discipline;
     }
 
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 

@@ -4,15 +4,11 @@ package dk.delfinen.gruppe5;
 import dk.delfinen.gruppe5.adapter.in.Controller;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
-import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
+import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
-import dk.delfinen.gruppe5.application.usecase.DeleteMemberUseCaseImpl;
-import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
-import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
+import dk.delfinen.gruppe5.application.usecase.*;
 import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
@@ -34,7 +30,11 @@ public class Main {
 
         DeleteMemberUseCase delete = new DeleteMemberUseCaseImpl(memberRepository);
 
-        Controller controller = new Controller(memberRepository, register, sort, delete, idGen);
+        AssignTrainerToCompetitiveSwimmerUseCase assignTrainer = new AssignTrainerToCompetitiveSwimmerUseCaseImpl(memberRepository);
+
+        RegisterBestTrainingResultUseCase registerBestTrainingResult = new RegisterBestTrainingResultUseCaseImpl(memberRepository);
+
+        Controller controller = new Controller(memberRepository, register, sort, delete, idGen, assignTrainer, registerBestTrainingResult);
 
         //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
 

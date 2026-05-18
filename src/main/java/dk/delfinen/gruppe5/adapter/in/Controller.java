@@ -3,9 +3,7 @@ package dk.delfinen.gruppe5.adapter.in;
 
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
-import dk.delfinen.gruppe5.application.port.in.DeleteMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.RegisterMemberUseCase;
-import dk.delfinen.gruppe5.application.port.in.SortMembersUseCase;
+import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
@@ -29,6 +27,8 @@ public class Controller {
     IdGenerator idGenerator;
     InputHandler inputHandler;
     DeleteMemberUseCase deleteMember;
+    AssignTrainerToCompetitiveSwimmerUseCase assignTrainer;
+    RegisterBestTrainingResultUseCase registerBestTrainingResult;
 
 
     public Controller(
@@ -36,7 +36,8 @@ public class Controller {
             RegisterMemberUseCase registerMember,
             SortMembersUseCase sortMembers,
             DeleteMemberUseCase deleteMember,
-            IdGenerator idGenerator
+            IdGenerator idGenerator,
+            AssignTrainerToCompetitiveSwimmerUseCase assignTrainer, RegisterBestTrainingResultUseCase registerBestTrainingResult
     ) {
         this.members = members;
         this.presenter = new Presenter(members);
@@ -45,6 +46,8 @@ public class Controller {
         this.deleteMember = deleteMember;
         this.idGenerator = idGenerator;
         this.inputHandler = new InputHandler(new Scanner(System.in));
+        this.assignTrainer = assignTrainer;
+        this.registerBestTrainingResult = registerBestTrainingResult;
     }
 
     public void start() {
@@ -156,33 +159,54 @@ public class Controller {
             System.out.println("Intet medlem fundet med det ID.");
         }
     }
-    public void trainerMenu() {
-//        inputHandler.chooseLooping(
-//                "Træner Menu",  // eventuelt en liste over mine svømmere
-//                new MenuOption[]{
-//                        new MenuOption("overtag svømmere", () -> {
-//                              ...
-//                            AssignTrainerToCompetitiveSwimmer();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("registrer træningsresultat", () -> {
-//                            ...();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("registrer stævneresultat", () -> {
-//                            ...();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("opdater svømmediscipliner", () -> {
-//                            ...();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("se statistik", () -> {
-//                            ...();
-//                        }),
-//                });
 
+    public void trainerMenu() {
+        inputHandler.chooseLooping(
+                "Træner Menu",  // eventuelt en liste over mine svømmere
+                new MenuOption[]{
+                        new MenuOption("overtag svømmere", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren");
+                            String name = inputHandler.getString("Indtast navn på træneren");
+                            assignTrainer.execute(id, name);
+                            String swimmerName = members.find(id).getName();
+                            System.out.println("Træner: " + name + "Er blevet tildelt svømmeren " + swimmerName);
+
+
+                        }),
+                        new MenuOption("registrer træningstider", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren");
+                            String discipline = inputHandler.getString("Indtast disciplin");
+                            double time = inputHandler.getDouble("Indtast tid");
+
+                            registerBestTrainingResult.execute(id, time, discipline);
+
+
+                                }),
+
+
+                }
+
+        );
     }
 }
 
+
+
+
+
+
+/// /                       })
+//               new MenuOption[]{
+ //                       new MenuOption("registrer stævneresultat", () -> {
+//
+ //                       }),
+ //               new MenuOption[]{
+ //                       new MenuOption("opdater svømmediscipliner", () -> {
+//
+ //                      }),
+ //               new MenuOption[]{
+ //                       new MenuOption("se statistik", () -> {
+//
+ //                       }),
+ //               });
 
