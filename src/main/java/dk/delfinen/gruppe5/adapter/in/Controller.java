@@ -200,6 +200,9 @@ public class Controller {
 
 
                         }),
+                        new MenuOption("opdater svømmediscipliner", () -> {
+
+                        }),
                 }
         );
     }
@@ -216,7 +219,7 @@ public class Controller {
 
 
 
-//                     new MenuOption("opdater svømmediscipliner", () -> {
+
 //
  //                      }),
  //               new MenuOption[]{
