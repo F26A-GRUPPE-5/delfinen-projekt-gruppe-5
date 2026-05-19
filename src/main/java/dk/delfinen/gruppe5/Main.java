@@ -2,6 +2,8 @@ package dk.delfinen.gruppe5;
 
 
 import dk.delfinen.gruppe5.adapter.in.Controller;
+import dk.delfinen.gruppe5.adapter.in.InputHandler;
+import dk.delfinen.gruppe5.adapter.in.Presenter;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberRepository;
 import dk.delfinen.gruppe5.adapter.out.persistence.FileMemberSerializer;
 import dk.delfinen.gruppe5.adapter.out.persistence.InMemoryMemberRepository;
@@ -9,74 +11,95 @@ import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
+import dk.delfinen.gruppe5.application.service.SystemClock;
 import dk.delfinen.gruppe5.application.usecase.*;
 import dk.delfinen.gruppe5.domain.model.*;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
 
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
 //        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
 //                "src/main/java/data/Members.csv"
-//        );
-        MemberRepository memberRepository = new InMemoryMemberRepository();
 
-        IdGenerator idGen = new RandomIdGenerator();
-
-        RegisterMemberUseCase register = new RegisterMemberUseCaseImpl(idGen, memberRepository);
-
-        SortMembersUseCase sort = new SortMembersUseCaseImpl();
-
-        DeleteMemberUseCase delete = new DeleteMemberUseCaseImpl(memberRepository);
-
-        AssignTrainerToCompetitiveSwimmerUseCase assignTrainer = new AssignTrainerToCompetitiveSwimmerUseCaseImpl(memberRepository);
-
-        RegisterBestTrainingResultUseCase registerBestTrainingResult = new RegisterBestTrainingResultUseCaseImpl(memberRepository);
-
-        RegisterCompetitionResultCase registerCompetitionResultCase = new RegisterCompetitionResultUseCaseImpl(memberRepository);
-
-        RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines = new RegisterSwimmerDisciplinesUseCaseImpl(memberRepository);
+            // Infrastructure
+            MemberRepository memberRepository = new InMemoryMemberRepository();
+            IdGenerator idGen = new RandomIdGenerator();
 
 
-        Controller controller = new Controller(memberRepository, register, sort, delete, idGen, assignTrainer, registerBestTrainingResult, registerCompetitionResultCase, registerSwimmerDisciplines);
 
-        //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
+            // Use cases
+            AssignTrainerToCompetitiveSwimmerUseCase assignTrainer =
+                    new AssignTrainerToCompetitiveSwimmerUseCaseImpl(memberRepository);
 
+            DeleteMemberUseCase deleteMember =
+                    new DeleteMemberUseCaseImpl(memberRepository);
 
-        controller.start();
+            EditMemberUseCase editMember =
+                    new EditMemberUseCaseImpl(memberRepository);
 
-        Membership active = new ActiveMembership();
+            FindMemberUseCase findMember =
+                    new FindMemberUseCaseImpl(memberRepository);
 
+            ListMembersUseCase listMembers =
+                    new ListMembersUseCaseImpl(memberRepository);
 
-        // Opretter et Member objekt (senior)
-        Member member = new Member(
-                1,
-                "Magnus",
-                2008,
-                true,
-                "Konkurrencesvømmer",
-                active
-        );
-        EditMemberUseCase edit = new EditMemberUseCaseImpl(memberRepository);
+            MarkMembershipPaymentUseCase markMembership =
+                    new MarkMembershipPaymentUseCaseImpl(memberRepository);
 
-        FindMemberUseCase find = new FindMemberUseCaseImpl(memberRepository);
+            RegisterBestTrainingResultUseCase registerBestTrainingResult =
+                    new RegisterBestTrainingResultUseCaseImpl(memberRepository);
 
-        SortMembersUseCase sort = new SortMembersUseCaseImpl();
+            RegisterCompetitionResultCase registerCompetitionResultCase =
+                    new RegisterCompetitionResultUseCaseImpl(memberRepository);
 
-        DeleteMemberUseCase delete = new DeleteMemberUseCaseImpl(memberRepository);
+            RegisterMemberUseCase registerMember =
+                    new RegisterMemberUseCaseImpl(idGen, memberRepository);
 
-        ListMembersUseCase listMembers = new ListMembersUseCaseImpl(memberRepository);
+            RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines =
+                    new RegisterSwimmerDisciplinesUseCaseImpl(memberRepository);
 
-        MarkMembershipPaymentUseCase markMembership = new MarkMembershipPaymentUseCaseImpl(memberRepository);
+            SortMembersUseCase sortMembers =
+                    new SortMembersUseCaseImpl();
 
-        Controller controller = new Controller(memberRepository, register, edit, find, sort, delete, listMembers, markMembership, idGen);
+            ViewExpectedYearlyIncomeUseCase viewIncome =
+                    new ViewExpectedYearlyIncomeUseCaseImpl(
+                            memberRepository,
+                            new CalculateMembershipFeeUseCaseImpl(
+                                    new SystemClock(), memberRepository));
 
-        //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
+        // UI helpers
+        Presenter presenter = new Presenter(memberRepository, listMembers);
+        InputHandler inputHandler = new InputHandler(new Scanner(System.in));
 
-        controller.start();
+            // Controller (constructor order MUST match fields)
+            Controller controller = new Controller(
+                    presenter,
+                    inputHandler,
+                    memberRepository,
+                    idGen,
+                    assignTrainer,
+                    deleteMember,
+                    editMember,
+                    findMember,
+                    listMembers,
+                    markMembership,
+                    registerBestTrainingResult,
+                    registerCompetitionResultCase,
+                    registerMember,
+                    registerSwimmerDisciplines,
+                    sortMembers,
+                    viewIncome
+            );
+
+            controller.start();
+
 //
 //        Membership active = new ActiveMembership();
 //

@@ -6,12 +6,14 @@ public class MemberDTO {
     public int birthYear;
     public boolean isCompetitor;
     public String activity;
+    public boolean hasPaid;
 
-    public MemberDTO(int id, String name, int birthYear, boolean isCompetitor, String activity) {
+    public MemberDTO(int id, String name, int birthYear, boolean isCompetitor, String activity, boolean hasPaid) {
         this.id = id;
         this.name = name;
         this.birthYear = birthYear;
         this.isCompetitor = isCompetitor;
         this.activity = activity;
+        this.hasPaid = hasPaid;
     }
 }

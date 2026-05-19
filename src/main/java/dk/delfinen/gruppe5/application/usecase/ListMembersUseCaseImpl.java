@@ -25,7 +25,8 @@ public class ListMembersUseCaseImpl implements ListMembersUseCase {
                     member.getName(),
                     member.getBirthYear(),
                     member.getIsCompetitor(),
-                    member.getActivity()));
+                    member.getActivity(),
+                    member.getHasPaid()));
         }
         return lines;
     }

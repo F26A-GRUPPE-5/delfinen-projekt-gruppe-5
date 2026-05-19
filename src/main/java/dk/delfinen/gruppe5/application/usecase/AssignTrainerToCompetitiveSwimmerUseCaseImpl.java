@@ -4,6 +4,8 @@ import dk.delfinen.gruppe5.application.port.in.AssignTrainerToCompetitiveSwimmer
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.domain.model.Member;
 
+import java.util.Optional;
+
 public class AssignTrainerToCompetitiveSwimmerUseCaseImpl implements AssignTrainerToCompetitiveSwimmerUseCase {
     private MemberRepository memberRepository;
 
@@ -12,19 +14,16 @@ public class AssignTrainerToCompetitiveSwimmerUseCaseImpl implements AssignTrain
         this.memberRepository = memberRepository;
 
     }
-    public void execute(int id, String name) {
-        if (memberRepository.exists(id)) {
-            Member member = memberRepository.find(id);
-            member.setTrainerName(name);
-            memberRepository.delete(id);
-            memberRepository.save(member);
+    public boolean execute(int id, String name) {
+        Optional<Member> memberOpt = memberRepository.find(id);
 
-
-
-
-
+        if (memberOpt.isEmpty()) {
+            return false;
         }
-
-
+        Member member = memberOpt.get();
+        member.setTrainerName(name);
+        memberRepository.delete(id);
+        memberRepository.save(member);
+        return true;
     }
 }
