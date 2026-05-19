@@ -1,4 +1,4 @@
-# Velkommen til Gruppe 5s Mario Projekt
+# Velkommen til Gruppe 5s Delfinen
 
 Dette repository indeholder gruppe 5's opgavebesvarelse til opgaven "Svømmeklubben Delfinen" på EK's datamatikeruddannelse. 
 I opgaven skulle vi udvikle et IT-system til en svømmeklub.  
