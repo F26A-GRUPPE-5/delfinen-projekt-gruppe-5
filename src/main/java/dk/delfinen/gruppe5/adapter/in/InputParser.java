@@ -65,4 +65,14 @@ public class InputParser {
 
         throw new InvalidInputException("Skriv ja eller nej.");
     }
+
+    public double parseDouble() throws InvalidInputException {
+        String input = scanner.nextLine().trim();
+        try {
+            return Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("Ugyldigt tal. ");
+        }
+    }
 }
+

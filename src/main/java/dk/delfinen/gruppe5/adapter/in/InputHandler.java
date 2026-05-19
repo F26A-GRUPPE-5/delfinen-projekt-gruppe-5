@@ -67,7 +67,8 @@ public class InputHandler {
 
     public void chooseLooping(String prompt, MenuOption[] choices) {
 
-        MenuOption exitOption = new MenuOption("Exit", () -> {}, true);
+        MenuOption exitOption = new MenuOption("Exit", () -> {
+        }, true);
 
         MenuOption[] allChoices = new MenuOption[choices.length + 1];
         System.arraycopy(choices, 0, allChoices, 0, choices.length);
@@ -76,6 +77,18 @@ public class InputHandler {
         while (true) {
             boolean shouldExit = choose(prompt, allChoices);
             if (shouldExit) break;
+        }
+
+    }
+
+    public double getDouble(String prompt) {
+        System.out.println(prompt);
+        while (true) {
+            try {
+                return parser.parseDouble();
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage() + "Prøv igen.");
+            }
         }
     }
 }

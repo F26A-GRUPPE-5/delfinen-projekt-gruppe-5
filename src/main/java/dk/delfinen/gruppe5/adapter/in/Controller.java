@@ -7,13 +7,17 @@ import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
+import dk.delfinen.gruppe5.application.usecase.RegisterCompetitionResultUseCaseImpl;
 import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
 import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
+import dk.delfinen.gruppe5.domain.model.Discipline;
 import dk.delfinen.gruppe5.domain.model.Member;
+import dk.delfinen.gruppe5.domain.model.TrainingResult;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -28,6 +32,10 @@ public class Controller {
     IdGenerator idGenerator;
     InputHandler inputHandler;
     DeleteMemberUseCase deleteMember;
+    AssignTrainerToCompetitiveSwimmerUseCase assignTrainer;
+    RegisterBestTrainingResultUseCase registerBestTrainingResult;
+    RegisterCompetitionResultCase registerCompetitionResultCase;
+    RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines;
     EditMemberUseCase editMember;
     FindMemberUseCase findMember;
     ListMembersUseCase listMembers;
@@ -41,6 +49,11 @@ public class Controller {
             FindMemberUseCase findMember,
             SortMembersUseCase sortMembers,
             DeleteMemberUseCase deleteMember,
+            IdGenerator idGenerator,
+            AssignTrainerToCompetitiveSwimmerUseCase assignTrainer, RegisterBestTrainingResultUseCase registerBestTrainingResult, RegisterCompetitionResultCase registerCompetitionResultCase,
+            RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines) {
+
+
             ListMembersUseCase listMembers,
             MarkMembershipPaymentUseCase markMembership,
             IdGenerator idGenerator
@@ -55,6 +68,10 @@ public class Controller {
         this.idGenerator = idGenerator;
         this.listMembers = listMembers;
         this.inputHandler = new InputHandler(new Scanner(System.in));
+        this.assignTrainer = assignTrainer;
+        this.registerBestTrainingResult = registerBestTrainingResult;
+        this.registerCompetitionResultCase = registerCompetitionResultCase;
+        this.registerSwimmerDisciplines = registerSwimmerDisciplines;
         this.markMembership = markMembership;
     }
 
@@ -160,33 +177,80 @@ public class Controller {
                 });
     }
 
-    public void trainerMenu() {
-//        inputHandler.chooseLooping(
-//                "Træner Menu",  // eventuelt en liste over mine svømmere
-//                new MenuOption[]{
-//                        new MenuOption("overtag svømmere", () -> {
-//                              ...
-//                            AssignTrainerToCompetitiveSwimmer();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("registrer træningsresultat", () -> {
-//                            ...();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("registrer stævneresultat", () -> {
-//                            ...();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("opdater svømmediscipliner", () -> {
-//                            ...();
-//                        }),
-//                new MenuOption[]{
-//                        new MenuOption("se statistik", () -> {
-//                            ...();
-//                        }),
-//                });
+    public void markMemberAsPaid() {
+        Member member = members.find(inputHandler.getInt("Indtast ID på medlem der har betalt: "));
+        if (member != null) {
+            member.setHasPaid(true);
+            System.out.println("Medlem markeret som betalt: " + member.getName());
+        } else {
+            System.out.println("Intet medlem fundet med det ID.");
+        }
+    }
 
+    public void trainerMenu() {
+        inputHandler.chooseLooping(
+                "Træner Menu",  // eventuelt en liste over mine svømmere
+                new MenuOption[]{
+                        new MenuOption("overtag svømmere", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren");
+                            String name = inputHandler.getString("Indtast navn på træneren");
+                            assignTrainer.execute(id, name);
+                            String swimmerName = members.find(id).getName();
+                            System.out.println("Træner: " + name + " er blevet tildelt svømmeren " + swimmerName);
+
+
+                        }),
+
+                        new MenuOption("registrer træningstider", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren");
+                            String discipline = inputHandler.getString("Indtast disciplin");
+                            double time = inputHandler.getDouble("Indtast tid");
+
+                            registerBestTrainingResult.execute(id, time, discipline);
+
+
+                        }),
+
+                        new MenuOption("registrer stævneresultat", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren:");
+                            Discipline discipline = Discipline.valueOf(inputHandler.getString("Indtast disciplin (Butterfly, Crawl, Rygcrawl, Brystsvømning):"));
+                            int placement = inputHandler.getInt("Indtast placering:");
+                            String competition = inputHandler.getString("Indtast stævnenavn:");
+                            String date = inputHandler.getString("Indtast dato:");
+
+
+                            registerCompetitionResultCase.execute(id, discipline, placement, competition, date);
+
+
+                        }),
+                        new MenuOption("opdater svømmediscipliner", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren:");
+                            String discipline = inputHandler.getString("Indtast disciplin (Butterfly, Crawl, Rygcrawl, Brystsvømning):");
+                            registerSwimmerDisciplines.execute(id, discipline);
+                        }),
+
+                        new MenuOption("se statistik", () -> {
+                            int id = inputHandler.getInt("indtast id på Svømmeren");
+                            if (members.exists(id)) {
+                                Member member = members.find(id);
+                                ArrayList<TrainingResult> results = member.getTrainingResults();
+
+                                if (results.isEmpty()) {
+                                    System.out.println("Ingen træningsresultater fundet");
+                                } else {
+                                    TrainingResult bedste = results.get(0);
+                                    for (TrainingResult result : results) {
+                                        if (result.getTime() < bedste.getTime()) {
+                                            bedste = result;
+                                        }
+                                    }
+                                    System.out.println("Bedste tid: " + bedste.getTime() + " i " + bedste.getDiscipline());
+                                }
+                            } else {
+                                System.out.println("Forkert id");
+                            }
+                        }),
+                }
+        );
     }
 }
-
-

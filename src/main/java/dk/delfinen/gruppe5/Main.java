@@ -28,6 +28,38 @@ public class Main {
 
         RegisterMemberUseCase register = new RegisterMemberUseCaseImpl(idGen, memberRepository);
 
+        SortMembersUseCase sort = new SortMembersUseCaseImpl();
+
+        DeleteMemberUseCase delete = new DeleteMemberUseCaseImpl(memberRepository);
+
+        AssignTrainerToCompetitiveSwimmerUseCase assignTrainer = new AssignTrainerToCompetitiveSwimmerUseCaseImpl(memberRepository);
+
+        RegisterBestTrainingResultUseCase registerBestTrainingResult = new RegisterBestTrainingResultUseCaseImpl(memberRepository);
+
+        RegisterCompetitionResultCase registerCompetitionResultCase = new RegisterCompetitionResultUseCaseImpl(memberRepository);
+
+        RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines = new RegisterSwimmerDisciplinesUseCaseImpl(memberRepository);
+
+
+        Controller controller = new Controller(memberRepository, register, sort, delete, idGen, assignTrainer, registerBestTrainingResult, registerCompetitionResultCase, registerSwimmerDisciplines);
+
+        //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
+
+
+        controller.start();
+
+        Membership active = new ActiveMembership();
+
+
+        // Opretter et Member objekt (senior)
+        Member member = new Member(
+                1,
+                "Magnus",
+                2008,
+                true,
+                "Konkurrencesvømmer",
+                active
+        );
         EditMemberUseCase edit = new EditMemberUseCaseImpl(memberRepository);
 
         FindMemberUseCase find = new FindMemberUseCaseImpl(memberRepository);

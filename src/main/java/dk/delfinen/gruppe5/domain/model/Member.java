@@ -3,6 +3,7 @@ package dk.delfinen.gruppe5.domain.model;
 import dk.delfinen.gruppe5.domain.service.Membership;
 
 import java.time.Year;
+import java.util.ArrayList;
 
 // Her i model lever Entities, inklusiv Business Rules, altså regler for hvad man må og ikke må.
 
@@ -15,6 +16,8 @@ public class Member {
     private Membership membership;
     private boolean hasPaid;
     private String trainerName;
+    private ArrayList<TrainingResult> trainingResults;
+    private ArrayList<MeetResult> meetResults;
 
 
     public Member(int id, String name, int birthYear, boolean isCompetitor, String activity, Membership membership) {
@@ -25,6 +28,7 @@ public class Member {
         this.activity = activity;
         this.membership = membership;
         this.hasPaid = false;
+        trainingResults = new ArrayList<>();
     }
 
     public Membership getMembership() {
@@ -92,9 +96,31 @@ public class Member {
         return trainerName;
     }
 
+    public ArrayList<TrainingResult> getTrainingResults() {
+        return trainingResults;
+    }
+
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
     }
+
+    public void addTrainingResult(TrainingResult result) {
+        trainingResults.add(result);
+
+    }
+
+    public void addMeetResult(MeetResult result) {
+        meetResults.add(result);
+
+    }
+
+    private ArrayList<String> disciplines = new ArrayList<>();
+
+    public void addDiscipline(String discipline) {
+        disciplines.add(discipline);
+    }
+
+
 
     @Override
     public String toString() {
