@@ -36,7 +36,10 @@ public class Main {
 
         RegisterCompetitionResultCase registerCompetitionResultCase = new RegisterCompetitionResultUseCaseImpl(memberRepository);
 
-        Controller controller = new Controller(memberRepository, register, sort, delete, idGen, assignTrainer, registerBestTrainingResult, registerCompetitionResultCase);
+        RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines = new RegisterSwimmerDisciplinesUseCaseImpl(memberRepository);
+
+
+        Controller controller = new Controller(memberRepository, register, sort, delete, idGen, assignTrainer, registerBestTrainingResult, registerCompetitionResultCase, registerSwimmerDisciplines);
 
         //memberRepository.clearAll(); Har sat den på hold da den sletter hele CSV filen hver gang programmet starter. Det er derfor ting kan forsvinde eller opføre sig mærkeligt.
 

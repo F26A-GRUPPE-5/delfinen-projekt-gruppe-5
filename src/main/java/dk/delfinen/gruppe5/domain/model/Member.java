@@ -96,16 +96,28 @@ public class Member {
         return trainerName;
     }
 
+    public ArrayList<TrainingResult> getTrainingResults() {
+        return trainingResults;
+    }
+
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
     }
+
     public void addTrainingResult(TrainingResult result) {
         trainingResults.add(result);
 
     }
+
     public void addMeetResult(MeetResult result) {
         meetResults.add(result);
 
+    }
+
+    private ArrayList<String> disciplines = new ArrayList<>();
+
+    public void addDiscipline(String discipline) {
+        disciplines.add(discipline);
     }
 
 
