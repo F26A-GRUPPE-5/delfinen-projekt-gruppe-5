@@ -105,4 +105,9 @@ public class InputHandler {
             }
         }
     }
+
+    public void pressEnter() {
+        System.out.println("Tryk enter");
+        parser.pressEnter();
+    }
 }

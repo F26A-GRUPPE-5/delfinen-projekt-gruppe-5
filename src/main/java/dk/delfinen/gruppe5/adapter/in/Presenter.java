@@ -63,11 +63,12 @@ public class Presenter {
                     String.format("""
                             id: %s
                             navn: %s
-                            betalt? : %s
+                               %s
+                            ------------
                             """,
                             memberDTO.id,
                             memberDTO.name,
-                            memberDTO.hasPaid);
+                            memberDTO.hasPaid? "betalt": "betalt");
         }
         return string;
     }

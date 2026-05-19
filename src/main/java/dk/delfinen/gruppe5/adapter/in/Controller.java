@@ -161,28 +161,19 @@ public class Controller {
                                     "skriv id på det medlem du vil markere som betalt"));
                             if (success) {
                                 System.out.println("medlem betalt");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("fejl, medlem kunne ikke findes");
+                                inputHandler.pressEnter();
                             }
                         }),
                         new MenuOption("se forventet årlig ", () -> {
                             System.out.println("Årlig forventet indkomst er: " + viewIncome.execute());
+                            inputHandler.pressEnter();
                         }),
                 });
     }
 
-    public void markMemberAsPaid() {
-        int id = inputHandler.getInt("Indtast ID på medlem der har betalt: ");
-        Optional<Member> memberOpt = members.find(id);
-
-        if (memberOpt.isPresent()) {
-            Member member = memberOpt.get();
-            member.setHasPaid(true);
-            System.out.println("Medlem markeret som betalt: " + member.getName());
-        } else {
-            System.out.println("Intet medlem fundet med det ID.");
-        }
-    }
 
     public void trainerMenu() {
         inputHandler.chooseLooping(
@@ -196,8 +187,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Træner " + name + " blev tildelt svømmeren.");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet.");
+                                inputHandler.pressEnter();
                             }
                         }),
 
@@ -210,8 +203,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Resultat registreret");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
+                                inputHandler.pressEnter();
                             }
                         }),
 
@@ -227,8 +222,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Konkurrenceresultat registreret");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
+                                inputHandler.pressEnter();
                             }
 
                         }),
@@ -239,8 +236,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Disciplin registreret");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
+                                inputHandler.pressEnter();
                             }
                         }),
 
@@ -251,6 +250,7 @@ public class Controller {
                                 ArrayList<TrainingResult> results = memberOpt.get().getTrainingResults();
                                 if (results.isEmpty()) {
                                     System.out.println("Ingen træningsresultater fundet");
+                                    inputHandler.pressEnter();
                                 } else {
                                     TrainingResult bedste = results.get(0);
                                     for (TrainingResult result : results) {
@@ -262,6 +262,7 @@ public class Controller {
                                 }
                             } else {
                                 System.out.println("Intet medlem fundet med det ID.");
+                                inputHandler.pressEnter();
                             }
                         }),
                 }
