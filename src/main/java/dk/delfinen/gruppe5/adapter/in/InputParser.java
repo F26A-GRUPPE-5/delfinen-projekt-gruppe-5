@@ -33,7 +33,6 @@ public class InputParser {
     public String parseDate() throws InvalidInputException {
         System.out.println("skriv i formatet dd-mm-yyyy");
         String input = scanner.nextLine().trim();
-        System.out.println("Input: '" + input + "' længde: " + input.length());
 
         if (input.isEmpty()) {
             throw new InvalidInputException("Dato må ikke være tom.");
@@ -65,8 +64,6 @@ public class InputParser {
 
     public String parseString() throws InvalidInputException {
         String input = scanner.nextLine().trim();
-        System.out.println("Input: '" + input + "' længde: " + input.length());
-
         if (input.isEmpty()) {
             throw new InvalidInputException("Input må ikke være tomt. ");
         }

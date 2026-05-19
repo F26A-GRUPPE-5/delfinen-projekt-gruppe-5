@@ -8,6 +8,7 @@ import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.model.TrainingResult;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -72,7 +73,7 @@ public class Controller {
     }
 
     public void start() {
-        inputHandler.chooseLooping("log ind som...", new MenuOption[]{
+        inputHandler.chooseLooping(() -> "log ind som...", new MenuOption[]{
                 new MenuOption("klubformand (se medlemmer)", () -> {
                     memberMenu();
                 }),
@@ -87,7 +88,7 @@ public class Controller {
 
     private void memberMenu() {
         inputHandler.chooseLooping(
-                presenter.MemberList(),
+                () -> presenter.MemberList(),
                 new MenuOption[]{
                         new MenuOption("tilføj medlem", () -> {
                             addMember();
@@ -128,7 +129,7 @@ public class Controller {
                 .orElse(null);
 
         inputHandler.chooseLooping(
-                "Hvad vil du ændre?:",
+                () -> "Hvad vil du ændre?:",
                 new MenuOption[]{
                         new MenuOption("Skift navn", () -> {
                             memberToEdit.setName(inputHandler.getString("Skriv navn"));
@@ -153,7 +154,7 @@ public class Controller {
 
     public void treasurerMenu() {
         inputHandler.chooseLooping(
-                presenter.SubscriptionPaidList(),
+                () -> presenter.SubscriptionPaidList(),
                 new MenuOption[]{
                         new MenuOption("marker medlem som betalt", () -> {
                             boolean success = markMembership.execute(inputHandler.getInt(
@@ -185,7 +186,7 @@ public class Controller {
 
     public void trainerMenu() {
         inputHandler.chooseLooping(
-                "Træner Menu",  // eventuelt en liste over mine svømmere
+                () -> "Træner Menu",  // eventuelt en liste over mine svømmere
                 new MenuOption[]{
                         new MenuOption("overtag svømmere", () -> {
                             int id = inputHandler.getInt("Indtast id på svømmeren");
@@ -212,9 +213,6 @@ public class Controller {
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
                             }
-                            ;
-
-
                         }),
 
                         new MenuOption("registrer stævneresultat", () -> {
