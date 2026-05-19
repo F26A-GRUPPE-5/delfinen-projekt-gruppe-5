@@ -103,5 +103,9 @@ public class InputParser {
             throw new InvalidInputException("Ugyldigt tal. ");
         }
     }
+    public void pressEnter(){
+        scanner.nextLine();
+    }
+
 }
 
