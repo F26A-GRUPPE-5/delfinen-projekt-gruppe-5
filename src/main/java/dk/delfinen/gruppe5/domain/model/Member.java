@@ -28,7 +28,9 @@ public class Member {
         this.activity = activity;
         this.membership = membership;
         this.hasPaid = false;
-        trainingResults = new ArrayList<>();
+
+        this.trainingResults = new ArrayList<>();
+        this.meetResults = new ArrayList<>();
     }
 
     public Membership getMembership() {
