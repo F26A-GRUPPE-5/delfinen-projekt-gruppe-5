@@ -20,13 +20,11 @@ public class MeetResult {
 
     // Constructor
     public MeetResult(Discipline discipline,
-                      double time,
                       int placement,
                       String competition,
                       String date) {
 
         this.discipline = discipline;
-        this.time = time;
         this.placement = placement;
         this.competition = competition;
         this.date = date;

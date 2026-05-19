@@ -17,6 +17,7 @@ public class Member {
     private boolean hasPaid;
     private String trainerName;
     private ArrayList<TrainingResult> trainingResults;
+    private ArrayList<MeetResult> meetResults;
 
 
     public Member(int id, String name, int birthYear, boolean isCompetitor, String activity, Membership membership) {
@@ -102,6 +103,11 @@ public class Member {
         trainingResults.add(result);
 
     }
+    public void addMeetResult(MeetResult result) {
+        meetResults.add(result);
+
+    }
+
 
 
     @Override

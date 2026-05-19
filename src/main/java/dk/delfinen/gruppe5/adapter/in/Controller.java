@@ -7,8 +7,10 @@ import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
+import dk.delfinen.gruppe5.application.usecase.RegisterCompetitionResultUseCaseImpl;
 import dk.delfinen.gruppe5.application.usecase.RegisterMemberUseCaseImpl;
 import dk.delfinen.gruppe5.application.usecase.SortMembersUseCaseImpl;
+import dk.delfinen.gruppe5.domain.model.Discipline;
 import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.Membership;
@@ -29,6 +31,7 @@ public class Controller {
     DeleteMemberUseCase deleteMember;
     AssignTrainerToCompetitiveSwimmerUseCase assignTrainer;
     RegisterBestTrainingResultUseCase registerBestTrainingResult;
+    RegisterCompetitionResultCase registerCompetitionResultCase;
 
 
     public Controller(
@@ -37,7 +40,7 @@ public class Controller {
             SortMembersUseCase sortMembers,
             DeleteMemberUseCase deleteMember,
             IdGenerator idGenerator,
-            AssignTrainerToCompetitiveSwimmerUseCase assignTrainer, RegisterBestTrainingResultUseCase registerBestTrainingResult
+            AssignTrainerToCompetitiveSwimmerUseCase assignTrainer, RegisterBestTrainingResultUseCase registerBestTrainingResult, RegisterCompetitionResultCase registerCompetitionResultCase
     ) {
         this.members = members;
         this.presenter = new Presenter(members);
@@ -48,6 +51,7 @@ public class Controller {
         this.inputHandler = new InputHandler(new Scanner(System.in));
         this.assignTrainer = assignTrainer;
         this.registerBestTrainingResult = registerBestTrainingResult;
+        this.registerCompetitionResultCase = registerCompetitionResultCase;
     }
 
     public void start() {
@@ -169,10 +173,11 @@ public class Controller {
                             String name = inputHandler.getString("Indtast navn på træneren");
                             assignTrainer.execute(id, name);
                             String swimmerName = members.find(id).getName();
-                            System.out.println("Træner: " + name + "Er blevet tildelt svømmeren " + swimmerName);
+                            System.out.println("Træner: " + name + " er blevet tildelt svømmeren " + swimmerName);
 
 
                         }),
+
                         new MenuOption("registrer træningstider", () -> {
                             int id = inputHandler.getInt("Indtast id på svømmeren");
                             String discipline = inputHandler.getString("Indtast disciplin");
@@ -181,11 +186,21 @@ public class Controller {
                             registerBestTrainingResult.execute(id, time, discipline);
 
 
-                                }),
+                        }),
+
+                        new MenuOption("registrer stævneresultat", () -> {
+                            int id = inputHandler.getInt("Indtast id på svømmeren:");
+                            Discipline discipline = Discipline.valueOf(inputHandler.getString("Indtast disciplin (Butterfly, Crawl, Rygcrawl, Brystsvomning):"));
+                            int placement = inputHandler.getInt("Indtast placering:");
+                            String competition = inputHandler.getString("Indtast stævnenavn:");
+                            String date = inputHandler.getString("Indtast dato:");
 
 
+                            registerCompetitionResultCase.execute(id, discipline, placement, competition, date);
+
+
+                        }),
                 }
-
         );
     }
 }
@@ -195,13 +210,13 @@ public class Controller {
 
 
 
-/// /                       })
-//               new MenuOption[]{
- //                       new MenuOption("registrer stævneresultat", () -> {
-//
- //                       }),
- //               new MenuOption[]{
- //                       new MenuOption("opdater svømmediscipliner", () -> {
+
+
+
+
+
+
+//                     new MenuOption("opdater svømmediscipliner", () -> {
 //
  //                      }),
  //               new MenuOption[]{
