@@ -49,7 +49,7 @@ public class HexagonalArchitectureTest {
                 .check(importedClasses);
     }
 
-    @Test
+    @Test //Too strict?
     void adapters_should_only_depend_on_allowed_areas() {
         classes()
                 .that().resideInAPackage("..adapter..")

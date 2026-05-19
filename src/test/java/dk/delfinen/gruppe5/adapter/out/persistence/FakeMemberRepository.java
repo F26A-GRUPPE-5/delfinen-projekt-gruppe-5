@@ -8,6 +8,7 @@ import dk.delfinen.gruppe5.domain.model.Member;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class FakeMemberRepository implements MemberRepository {
 
@@ -20,8 +21,8 @@ public class FakeMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member find(int id) {
-        return members.get(id);
+    public Optional<Member> find(int id) {
+        return Optional.of(members.get(id));
     }
 
     @Override

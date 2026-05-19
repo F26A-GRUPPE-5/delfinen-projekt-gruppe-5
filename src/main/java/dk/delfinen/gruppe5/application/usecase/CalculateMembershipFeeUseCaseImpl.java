@@ -24,7 +24,7 @@ public class CalculateMembershipFeeUseCaseImpl implements CalculateMembershipFee
     }
 
     public double execute(int id) {
-        Member member = repo.find(id);
+        Member member = repo.find(id).orElseThrow( () -> new RuntimeException("Member not found"));
         return member.getMembership().calculateFee(getAge(member));
     }
 }

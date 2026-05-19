@@ -17,9 +17,9 @@ public class DeleteMemberUseCaseImpl implements DeleteMemberUseCase {
 
     public void execute(int id) {
         if (repository.exists(id)) {
-            Member toRemove = repository.find(id);
+            Member toRemove = repository.find(id).orElseThrow( () -> new RuntimeException("Member not found"));
             repository.delete(id);
-            System.out.println("Du har slettet: ");
+            System.out.println("Du har slettet: /n");
             System.out.println();
             System.out.println(toRemove);
         } else {

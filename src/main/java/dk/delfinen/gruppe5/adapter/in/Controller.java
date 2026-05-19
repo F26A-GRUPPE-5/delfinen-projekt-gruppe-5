@@ -18,6 +18,7 @@ import dk.delfinen.gruppe5.domain.service.Membership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 //TODO: Denne skal nok deles op i 2:
@@ -35,10 +36,17 @@ public class Controller {
     RegisterBestTrainingResultUseCase registerBestTrainingResult;
     RegisterCompetitionResultCase registerCompetitionResultCase;
     RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines;
+    EditMemberUseCase editMember;
+    FindMemberUseCase findMember;
+    ListMembersUseCase listMembers;
+    MarkMembershipPaymentUseCase markMembership;
+
 
     public Controller(
             MemberRepository members,
             RegisterMemberUseCase registerMember,
+            EditMemberUseCase editMember,
+            FindMemberUseCase findMember,
             SortMembersUseCase sortMembers,
             DeleteMemberUseCase deleteMember,
             IdGenerator idGenerator,
@@ -46,17 +54,25 @@ public class Controller {
             RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines) {
 
 
+            ListMembersUseCase listMembers,
+            MarkMembershipPaymentUseCase markMembership,
+            IdGenerator idGenerator
+    ) {
         this.members = members;
-        this.presenter = new Presenter(members);
+        this.presenter = new Presenter(members, listMembers);
         this.registerMember = registerMember;
+        this.editMember = editMember;
+        this.findMember = findMember;
         this.sortMembers = sortMembers;
         this.deleteMember = deleteMember;
         this.idGenerator = idGenerator;
+        this.listMembers = listMembers;
         this.inputHandler = new InputHandler(new Scanner(System.in));
         this.assignTrainer = assignTrainer;
         this.registerBestTrainingResult = registerBestTrainingResult;
         this.registerCompetitionResultCase = registerCompetitionResultCase;
         this.registerSwimmerDisciplines = registerSwimmerDisciplines;
+        this.markMembership = markMembership;
     }
 
     public void start() {
@@ -110,16 +126,13 @@ public class Controller {
     }
 
     public void editMember() {
-        int id = inputHandler.getInt("Indtast id'et på det medlem du vil redigere: ");
 
-        if (!members.exists(id)) {
-            System.out.println("Intet medlem kunne finde med det id");
-            return;
-        }
-        Member memberToEdit = members.find(id);
+        Member memberToEdit = findMember.execute(
+                inputHandler.getInt("Indtast id'et på det medlem du vil redigere: "))
+                .orElse(null);
 
         inputHandler.chooseLooping(
-                "Indtast nr på handling:",
+                "Hvad vil du ændre?:",
                 new MenuOption[]{
                         new MenuOption("Skift navn", () -> {
                             memberToEdit.setName(inputHandler.getString("Skriv navn"));
@@ -147,15 +160,20 @@ public class Controller {
                 presenter.SubscriptionPaidList(),
                 new MenuOption[]{
                         new MenuOption("marker medlem som betalt", () -> {
-                            markMemberAsPaid();
+                            boolean success = markMembership.execute(inputHandler.getInt(
+                                    "skriv id på det medlem du vil markere som betalt"));
+                            if (success) {
+                                System.out.println("medlem betalt");
+                            } else {
+                                System.out.println("fejl, medlem kunne ikke findes");
+                            }
                         }),
                         new MenuOption("se forventet årlig ", () -> {
-                            markMemberAsPaid();
+
                         }),
                         new MenuOption("marker medlem som betalt", () -> {
-                            markMemberAsPaid();
-                        }),
 
+                        }),
                 });
     }
 
