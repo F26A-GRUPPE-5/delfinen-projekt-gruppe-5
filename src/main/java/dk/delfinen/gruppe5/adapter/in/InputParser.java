@@ -30,6 +30,38 @@ public class InputParser {
         return chosen;
     }
 
+    public String parseDate() throws InvalidInputException {
+        System.out.println("skriv i formatet dd-mm-yyyy");
+        String input = scanner.nextLine().trim();
+        System.out.println("Input: '" + input + "' længde: " + input.length());
+
+        if (input.isEmpty()) {
+            throw new InvalidInputException("Dato må ikke være tom.");
+        }
+
+        if (!input.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            throw new InvalidInputException("Ugyldigt datoformat. Brug dd-MM-yyyy (fx 12-05-2026)");
+        }
+
+        String[] parts = input.split("-");
+        int day = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int year = Integer.parseInt(parts[2]);
+
+        if (month < 1 || month > 12) {
+            throw new InvalidInputException("Ugyldig måned.");
+        }
+
+        if (day < 1 || day > 31) {
+            throw new InvalidInputException("Ugyldig dag.");
+        }
+
+        if (year < 1900 || year > 2100) {
+            throw new InvalidInputException("Ugyldigt år.");
+        }
+
+        return input;
+    }
 
     public String parseString() throws InvalidInputException {
         String input = scanner.nextLine().trim();
