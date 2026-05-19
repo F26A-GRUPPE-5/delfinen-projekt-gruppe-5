@@ -33,6 +33,17 @@ public class InputHandler {
         }
     }
 
+    public String getDate(String prompt) {
+        System.out.println(prompt);
+        while (true) {
+            try {
+                return parser.parseDate();
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage() + "Prøv igen.");
+            }
+        }
+    }
+
     public Boolean getBoolean(String prompt) {
         System.out.println(prompt);
         while (true) {

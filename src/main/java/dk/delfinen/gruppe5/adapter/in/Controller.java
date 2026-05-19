@@ -222,7 +222,7 @@ public class Controller {
                             Discipline discipline = Discipline.valueOf(inputHandler.getString("Indtast disciplin (Butterfly, Crawl, Rygcrawl, Brystsvømning):"));
                             int placement = inputHandler.getInt("Indtast placering:");
                             String competition = inputHandler.getString("Indtast stævnenavn:");
-                            String date = inputHandler.getString("Indtast dato:");
+                            String date = inputHandler.getDate("Indtast dato:");
 
 
                             boolean success = registerCompetitionResultCase.execute(id, discipline, placement, competition, date);
