@@ -31,7 +31,20 @@ public class Presenter {
         String string = "";
         List<MemberDTO> list = listMembers.execute();
         for (MemberDTO memberDTO : list) {
-            string += memberDTO;
+            string +=
+                    String.format("""
+                            id: %s
+                            navn: %s
+                            fødselsår: %s
+                            konkurrerende:
+                            aktivitet:
+                            
+                            """,
+                            memberDTO.id,
+                            memberDTO.name,
+                            memberDTO.birthYear,
+                            memberDTO.isCompetitor,
+                            memberDTO.activity);
         }
         return string;
     }
@@ -47,31 +60,20 @@ public class Presenter {
     }
 
     public String SubscriptionPaidList() {
-        String subscribers = "";
-        for (Member m : members.findAll()) {
-
-            String status;
-
-            if (m.getHasPaid()) {
-                status = "Paid";
-            } else {
-                status = "Unpaid";
-            }
-
-            subscribers += ("""
-                    medlemsId: %s
-                    navn: %s
-                    kontigent: %s
-                    
-                    
-                    """. formatted(
-                    m.getId(),
-                    m.getName(),
-                    status
-
-            ));
+        String string = "";
+        List<MemberDTO> list = listMembers.execute();
+        for (MemberDTO memberDTO : list) {
+            string +=
+                    String.format("""
+                            id: %s
+                            navn: %s
+                            betalt? : %s
+                            """,
+                            memberDTO.id,
+                            memberDTO.name,
+                            memberDTO.hasPaid);
         }
-        return subscribers;
+        return string;
     }
 
     public String SubscriptionUnpaidList() {

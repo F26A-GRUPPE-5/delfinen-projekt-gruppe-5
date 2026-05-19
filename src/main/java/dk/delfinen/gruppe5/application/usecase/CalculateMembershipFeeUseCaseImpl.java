@@ -1,7 +1,7 @@
 package dk.delfinen.gruppe5.application.usecase;
 
 import dk.delfinen.gruppe5.application.port.in.CalculateMembershipFeeUseCase;
-import dk.delfinen.gruppe5.application.port.in.Clock;
+import dk.delfinen.gruppe5.application.port.in.ClockObj;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
@@ -10,10 +10,10 @@ import java.time.ZoneId;
 
 public class CalculateMembershipFeeUseCaseImpl implements CalculateMembershipFeeUseCase {
 
-    private final Clock clock;
+    private final ClockObj clock;
     private final MemberRepository repo;
 
-    public CalculateMembershipFeeUseCaseImpl(Clock clock, MemberRepository repo) {
+    public CalculateMembershipFeeUseCaseImpl(ClockObj clock, MemberRepository repo) {
         this.clock = clock;
         this.repo = repo;
     }

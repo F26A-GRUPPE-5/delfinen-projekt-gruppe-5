@@ -75,7 +75,9 @@ public class InputHandler {
         allChoices[choices.length] = exitOption;
 
         while (true) {
-            boolean shouldExit = choose(prompt, allChoices);
+            System.out.println(prompt);
+            System.out.println("--------------------------------------");
+            boolean shouldExit = choose("", allChoices);
             if (shouldExit) break;
         }
 

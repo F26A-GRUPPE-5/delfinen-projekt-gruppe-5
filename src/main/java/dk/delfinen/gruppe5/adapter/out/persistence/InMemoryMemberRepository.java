@@ -4,6 +4,9 @@ import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.application.service.RandomIdGenerator;
 import dk.delfinen.gruppe5.domain.model.Member;
+import dk.delfinen.gruppe5.domain.service.ActiveMembership;
+import dk.delfinen.gruppe5.domain.service.PassiveMembership;
+
 import java.util.*;
 
 public class InMemoryMemberRepository implements MemberRepository{
@@ -11,9 +14,34 @@ public class InMemoryMemberRepository implements MemberRepository{
     private HashMap<Integer, Member> members;
 
     public InMemoryMemberRepository() {
-        System.out.println("For debugging: created repo");
         this.members = new HashMap<>();
         idGenerator = new RandomIdGenerator();
+
+        buildStandardList();
+    }
+
+    public void buildStandardList() {
+        save(new Member(
+                1,
+                "Rasmus Klump",
+                1999,
+                true,
+                "crawl",
+                new ActiveMembership()));
+        save(new Member(
+                2,
+                "Ronald McDonalds son",
+                2020,
+                true,
+                "crawl",
+                new ActiveMembership()));
+        save(new Member(
+                3,
+                "Jesus Christ",
+                0,
+                false,
+                "walking on water",
+                new PassiveMembership()));
     }
 
     @Override

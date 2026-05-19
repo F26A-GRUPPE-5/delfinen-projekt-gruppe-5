@@ -4,6 +4,8 @@ import dk.delfinen.gruppe5.application.port.in.RegisterSwimmerDisciplinesUseCase
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
 import dk.delfinen.gruppe5.domain.model.Member;
 
+import java.util.Optional;
+
 public class RegisterSwimmerDisciplinesUseCaseImpl implements RegisterSwimmerDisciplinesUseCase {
 
     private MemberRepository memberRepository;
@@ -13,13 +15,16 @@ public class RegisterSwimmerDisciplinesUseCaseImpl implements RegisterSwimmerDis
     }
 
 
-    public void execute(int id, String discipline) {
-        if (memberRepository.exists(id)) {
-            Member member = memberRepository.find(id);
-            member.addDiscipline(discipline);
-            memberRepository.delete(id);
-            memberRepository.save(member);
+    public boolean execute(int id, String discipline) {
+        Optional<Member> memberOpt = memberRepository.find(id);
+        if (memberOpt.isEmpty()) {
+            return false;
         }
+        Member member = memberOpt.get();
+        member.addDiscipline(discipline);
+        memberRepository.delete(id);
+        memberRepository.save(member);
+        return true;
     }
 }
 
