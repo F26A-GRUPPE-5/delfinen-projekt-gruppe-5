@@ -1,47 +1,51 @@
 package dk.delfinen.gruppe5.domain.model;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import dk.delfinen.gruppe5.domain.service.ActiveMembership;
+import dk.delfinen.gruppe5.domain.service.PassiveMembership;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MemberTest {
 
-    @BeforeEach
-    void setUp() {
+    @Test
+    void testJuniorFee() {
 
+        ActiveMembership membership = new ActiveMembership();
+
+        double fee = membership.calculateFee(16);
+
+        assertEquals(1000, fee);
     }
 
     @Test
-    void getId() {
+    void testSeniorFee() {
+
+        ActiveMembership membership = new ActiveMembership();
+
+        double fee = membership.calculateFee(25);
+
+        assertEquals(1600, fee);
     }
 
     @Test
-    void getName() {
+    void testSeniorDiscountFee() {
+
+        ActiveMembership membership = new ActiveMembership();
+
+        double fee = membership.calculateFee(65);
+
+        assertEquals(1200, fee);
     }
 
     @Test
-    void getBirthYear() {
-    }
+    void testPassiveFee() {
 
-    @Test
-    void getIsCompetitor() {
-    }
+        PassiveMembership membership = new PassiveMembership();
 
-    @Test
-    void getActivity() {
-    }
+        double fee = membership.calculateFee(30);
 
-    @Test
-    void getAge() {
-    }
-
-    @Test
-    void getFee() {
-    }
-
-    @Test
-    void testToString() {
+        assertEquals(500, fee);
     }
 }
