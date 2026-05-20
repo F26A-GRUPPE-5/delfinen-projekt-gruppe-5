@@ -141,5 +141,11 @@ public class Member {
                 getActivity()
         );
     }
+
+    public boolean isCompetitor() {
+        return isCompetitor;
+    }
+
+
 }
 

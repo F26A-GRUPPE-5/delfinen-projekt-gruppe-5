@@ -28,6 +28,10 @@ public class Main {
 
 
         // Infrastructure
+//        MemberRepository memberRepository = new InMemoryMemberRepository();
+        // den loader direkte fra Members.csv fordi vi bruger:
+        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
+                "src/main/java/data/Members.csv");
         MemberRepository memberRepository = new InMemoryMemberRepository();
 //        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
 //                "src/main/java/data/Members.csv");
@@ -74,6 +78,9 @@ public class Main {
                         new CalculateMembershipFeeUseCaseImpl(
                                 new SystemClock(), memberRepository));
 
+        ViewTop5SwimmersPerDisciplineUseCaseImpl top5UseCase =
+                new ViewTop5SwimmersPerDisciplineUseCaseImpl(memberRepository);
+
         // UI helpers
         Presenter presenter = new Presenter(memberRepository, listMembers);
         InputHandler inputHandler = new InputHandler(new Scanner(System.in));
@@ -95,8 +102,11 @@ public class Main {
                 registerMember,
                 registerSwimmerDisciplines,
                 sortMembers,
-                viewIncome
+                viewIncome,
+                top5UseCase
         );
+
+
 
         controller.start();
     }
