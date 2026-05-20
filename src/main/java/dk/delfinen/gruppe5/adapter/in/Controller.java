@@ -9,6 +9,7 @@ import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.model.TrainingResult;
 import dk.delfinen.gruppe5.domain.service.ActiveMembership;
 import dk.delfinen.gruppe5.domain.service.PassiveMembership;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -78,7 +79,7 @@ public class Controller {
     }
 
     public void start() {
-        inputHandler.chooseLooping("log ind som...", new MenuOption[]{
+        inputHandler.chooseLooping(() -> "log ind som...", new MenuOption[]{
                 new MenuOption("klubformand (se medlemmer)", () -> {
                     memberMenu();
                 }),
@@ -93,7 +94,7 @@ public class Controller {
 
     private void memberMenu() {
         inputHandler.chooseLooping(
-                presenter.MemberList(),
+                () -> presenter.MemberList(),
                 new MenuOption[]{
                         new MenuOption("tilføj medlem", () -> {
                             addMember();
@@ -134,7 +135,7 @@ public class Controller {
                 .orElse(null);
 
         inputHandler.chooseLooping(
-                "Hvad vil du ændre?:",
+                () -> "Hvad vil du ændre?:",
                 new MenuOption[]{
                         new MenuOption("Skift navn", () -> {
                             memberToEdit.setName(inputHandler.getString("Skriv navn"));
@@ -159,39 +160,30 @@ public class Controller {
 
     public void treasurerMenu() {
         inputHandler.chooseLooping(
-                presenter.SubscriptionPaidList(),
+                () -> presenter.SubscriptionPaidList(),
                 new MenuOption[]{
                         new MenuOption("marker medlem som betalt", () -> {
                             boolean success = markMembership.execute(inputHandler.getInt(
                                     "skriv id på det medlem du vil markere som betalt"));
                             if (success) {
                                 System.out.println("medlem betalt");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("fejl, medlem kunne ikke findes");
+                                inputHandler.pressEnter();
                             }
                         }),
                         new MenuOption("se forventet årlig ", () -> {
                             System.out.println("Årlig forventet indkomst er: " + viewIncome.execute());
+                            inputHandler.pressEnter();
                         }),
                 });
     }
 
-    public void markMemberAsPaid() {
-        int id = inputHandler.getInt("Indtast ID på medlem der har betalt: ");
-        Optional<Member> memberOpt = members.find(id);
-
-        if (memberOpt.isPresent()) {
-            Member member = memberOpt.get();
-            member.setHasPaid(true);
-            System.out.println("Medlem markeret som betalt: " + member.getName());
-        } else {
-            System.out.println("Intet medlem fundet med det ID.");
-        }
-    }
 
     public void trainerMenu() {
         inputHandler.chooseLooping(
-                "Træner Menu",  // eventuelt en liste over mine svømmere
+                () -> "Træner Menu",  // eventuelt en liste over mine svømmere
                 new MenuOption[]{
                         new MenuOption("overtag svømmere", () -> {
                             int id = inputHandler.getInt("Indtast id på svømmeren");
@@ -201,8 +193,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Træner " + name + " blev tildelt svømmeren.");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet.");
+                                inputHandler.pressEnter();
                             }
                         }),
 
@@ -217,12 +211,11 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Resultat registreret");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
+                                inputHandler.pressEnter();
                             }
-                            ;
-
-
                         }),
 
                         new MenuOption("registrer stævneresultat", () -> {
@@ -237,8 +230,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Konkurrenceresultat registreret");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
+                                inputHandler.pressEnter();
                             }
 
                         }),
@@ -249,8 +244,10 @@ public class Controller {
 
                             if (success) {
                                 System.out.println("Disciplin registreret");
+                                inputHandler.pressEnter();
                             } else {
                                 System.out.println("Kunne ikke finde medlemmet");
+                                inputHandler.pressEnter();
                             }
                         }),
 
@@ -261,6 +258,7 @@ public class Controller {
                                 ArrayList<TrainingResult> results = memberOpt.get().getTrainingResults();
                                 if (results.isEmpty()) {
                                     System.out.println("Ingen træningsresultater fundet");
+                                    inputHandler.pressEnter();
                                 } else {
                                     TrainingResult bedste = results.get(0);
                                     for (TrainingResult result : results) {
@@ -272,6 +270,7 @@ public class Controller {
                                 }
                             } else {
                                 System.out.println("Intet medlem fundet med det ID.");
+                                inputHandler.pressEnter();
                             }
                         }),
 

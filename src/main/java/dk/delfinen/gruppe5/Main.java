@@ -32,6 +32,9 @@ public class Main {
         // den loader direkte fra Members.csv fordi vi bruger:
         MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
                 "src/main/java/data/Members.csv");
+        MemberRepository memberRepository = new InMemoryMemberRepository();
+//        MemberRepository memberRepository = new FileMemberRepository(new FileMemberSerializer(),
+//                "src/main/java/data/Members.csv");
         IdGenerator idGen = new RandomIdGenerator();
 
 

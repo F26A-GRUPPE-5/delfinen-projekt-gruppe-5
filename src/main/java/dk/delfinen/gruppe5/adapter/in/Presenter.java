@@ -15,15 +15,11 @@ import java.util.List;
 import java.util.SequencedCollection;
 
 
-// TODO: her skal blandt andet formatering være, for eksempel hvis vi vil have farver eller skal vise noget i et table
-//  det kan også handle om hvad der skal vises og skjules, eller catching errors og printe dem til brugeren på en pæn måde
 public class Presenter {
-    MemberRepository members;
 
     ListMembersUseCase listMembers;
     
     public Presenter(MemberRepository members, ListMembersUseCase listMembers) {
-        this.members = members;
         this.listMembers = listMembers;
     }
 
@@ -36,8 +32,8 @@ public class Presenter {
                             id: %s
                             navn: %s
                             fødselsår: %s
-                            konkurrerende:
-                            aktivitet:
+                            konkurrerende: %s
+                            aktivitet: %s
                             
                             """,
                             memberDTO.id,
@@ -67,22 +63,16 @@ public class Presenter {
                     String.format("""
                             id: %s
                             navn: %s
-                            betalt? : %s
+                               %s
+                            ------------
                             """,
                             memberDTO.id,
                             memberDTO.name,
-                            memberDTO.hasPaid);
+                            memberDTO.hasPaid? "betalt": "betalt");
         }
         return string;
     }
 
-    public String SubscriptionUnpaidList() {
-        String string = "";
-        for (Member m : members.findAll()) {
-            string += m;
-        }
-        return string;
-    }
 }
 
 

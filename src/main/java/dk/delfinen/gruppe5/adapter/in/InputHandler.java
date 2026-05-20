@@ -2,6 +2,7 @@ package dk.delfinen.gruppe5.adapter.in;
 
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Supplier;
 
 public class InputHandler {
 
@@ -76,7 +77,7 @@ public class InputHandler {
         }
     }
 
-    public void chooseLooping(String prompt, MenuOption[] choices) {
+    public void chooseLooping(Supplier<String> prompt, MenuOption[] choices) {
 
         MenuOption exitOption = new MenuOption("Exit", () -> {
         }, true);
@@ -86,7 +87,7 @@ public class InputHandler {
         allChoices[choices.length] = exitOption;
 
         while (true) {
-            System.out.println(prompt);
+            System.out.println(prompt.get());
             System.out.println("--------------------------------------");
             boolean shouldExit = choose("", allChoices);
             if (shouldExit) break;
@@ -103,5 +104,10 @@ public class InputHandler {
                 System.out.println(e.getMessage() + "Prøv igen.");
             }
         }
+    }
+
+    public void pressEnter() {
+        System.out.println("Tryk enter");
+        parser.pressEnter();
     }
 }
