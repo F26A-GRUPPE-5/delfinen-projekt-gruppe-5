@@ -3,6 +3,7 @@ package dk.delfinen.gruppe5.adapter.in;
 import dk.delfinen.gruppe5.application.port.in.*;
 import dk.delfinen.gruppe5.application.port.out.IdGenerator;
 import dk.delfinen.gruppe5.application.port.out.MemberRepository;
+import dk.delfinen.gruppe5.application.usecase.ViewTop5SwimmersPerDisciplineUseCaseImpl;
 import dk.delfinen.gruppe5.domain.model.Discipline;
 import dk.delfinen.gruppe5.domain.model.Member;
 import dk.delfinen.gruppe5.domain.model.TrainingResult;
@@ -33,6 +34,9 @@ public class Controller {
     private final RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines;
     private final SortMembersUseCase sortMembers;
     private final ViewExpectedYearlyIncomeUseCase viewIncome;
+    private final ViewTop5SwimmersPerDisciplineUseCaseImpl top5UseCase;
+
+
 
 
     public Controller(
@@ -51,7 +55,8 @@ public class Controller {
             RegisterMemberUseCase registerMember,
             RegisterSwimmerDisciplinesUseCase registerSwimmerDisciplines,
             SortMembersUseCase sortMembers,
-            ViewExpectedYearlyIncomeUseCase viewIncome
+            ViewExpectedYearlyIncomeUseCase viewIncome,
+            ViewTop5SwimmersPerDisciplineUseCaseImpl top5UseCase
     ) {
         this.presenter = presenter;
         this.inputHandler = inputHandler;
@@ -69,6 +74,7 @@ public class Controller {
         this.registerSwimmerDisciplines = registerSwimmerDisciplines;
         this.sortMembers = sortMembers;
         this.viewIncome = viewIncome;
+        this.top5UseCase = top5UseCase;
     }
 
     public void start() {
@@ -207,6 +213,8 @@ public class Controller {
 
                             boolean success = registerBestTrainingResult.execute(id, time, discipline);
 
+                            members.save(members.find(id).get());
+
                             if (success) {
                                 System.out.println("Resultat registreret");
                             } else {
@@ -265,6 +273,40 @@ public class Controller {
                             } else {
                                 System.out.println("Intet medlem fundet med det ID.");
                             }
+                        }),
+
+                        new MenuOption("se top 5 svømmere", () -> {
+
+                            System.out.println("""
+            
+            Vælg disciplin:
+            1. Crawl
+            2. Butterfly
+            3. Rygcrawl
+            4. Brystsvømning
+            """);
+
+                            int choice = inputHandler.getInt("Vælg disciplin:");
+
+                            String discipline = switch (choice) {
+                                case 1 -> "Crawl";
+                                case 2 -> "Butterfly";
+                                case 3 -> "Rygcrawl";
+                                case 4 -> "Brystsvømning";
+                                default -> "";
+                            };
+
+                            System.out.println("\nTOP 5 SENIOR - " + discipline);
+
+
+
+                            top5UseCase.execute(discipline)
+                                    .forEach(System.out::println);
+
+                            System.out.println("\nTOP 5 JUNIOR - " + discipline);
+
+                            top5UseCase.executeJunior(discipline)
+                                    .forEach(System.out::println);
                         }),
                 }
         );
