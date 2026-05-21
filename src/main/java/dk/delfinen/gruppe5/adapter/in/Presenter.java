@@ -68,7 +68,7 @@ public class Presenter {
                             """,
                             memberDTO.id,
                             memberDTO.name,
-                            memberDTO.hasPaid? "betalt": "betalt");
+                            memberDTO.hasPaid? "Betalt": "Ikke betalt");
         }
         return string;
     }

@@ -70,6 +70,10 @@ public class Member {
         return membership.calculateFee(getAge());
     }
 
+    public boolean isHasPaid() {
+        return hasPaid;
+    }
+
     public void setHasPaid(boolean hasPaid) {
         this.hasPaid = hasPaid;
     }

@@ -49,7 +49,24 @@ public class FileMemberRepository implements MemberRepository {
 
     @Override
     public void save(Member member) {
-        lines.add(memberSerializer.toCSV(member));
+
+        String updatedLine = memberSerializer.toCSV(member);
+        boolean updated = false;
+
+        for (int i = 0; i < lines.size(); i++) {
+            Member existing = memberSerializer.toMember(lines.get(i));
+
+            if (existing.getId() == member.getId()) {
+                lines.set(i, updatedLine);
+                updated = true;
+                break;
+            }
+        }
+
+        if (!updated) {
+            lines.add(updatedLine);
+        }
+
         writeFile();
     }
 

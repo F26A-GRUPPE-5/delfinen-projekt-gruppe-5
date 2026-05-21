@@ -1,4 +1,4 @@
-7024, jens, 12, true, 9, active, null
-3356, Bent, 1999, true, Crawl, active, null
-1, Magnus, 2008, true, Konkurrencesvømmer, active, Hans
-1, Magnus, 2008, true, Konkurrencesvømmer, active, Hans
+7024, jens, 12, true, 9, active, null, false
+3356, Bent, 1999, true, Crawl, active, null, true
+1, Magnus, 2008, true, Konkurrencesvømmer, active, null, true
+4069, OLe, 2000, true, Crawl, active, null, true

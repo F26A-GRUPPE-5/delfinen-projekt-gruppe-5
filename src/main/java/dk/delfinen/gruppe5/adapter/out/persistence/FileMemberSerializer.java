@@ -16,31 +16,36 @@ public class FileMemberSerializer {
                 member.getIsCompetitor(),
                 member.getActivity(),
                 "active",
-                member.getTrainerName()
+                member.getTrainerName(),
+                member.getHasPaid()
         };
 
         StringBuilder csv = new StringBuilder();
 
-        for (Object field: fields) {
+        for (Object field : fields) {
             csv.append(field).append(", ");
         }
 
         return csv.substring(0, csv.length() - 2);
     }
+
     public Member toMember(String csv) {
 
-        String[] tokenized = csv.split(", ");
+        String[] t = csv.split(", ");
 
         Member member = new Member(
-                Integer.parseInt(tokenized[0]),
-                tokenized[1],
-                Integer.parseInt(tokenized[2]),
-                Boolean.parseBoolean(tokenized[3]),
-                tokenized[4],
+                Integer.parseInt(t[0]),
+                t[1],
+                Integer.parseInt(t[2]),
+                Boolean.parseBoolean(t[3]),
+                t[4],
                 new ActiveMembership()
         );
 
-        member.setTrainerName(tokenized[6]);
+        member.setTrainerName(t[6]);
+
+        // ✅ THIS IS MISSING
+        member.setHasPaid(Boolean.parseBoolean(t[7]));
 
         return member;
     }
